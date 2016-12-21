@@ -1,0 +1,8 @@
+$primary-color: #212121; //color("grey", "darken-4");
+$primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 15%);
+
+$secondary-color: #ff9100; //color("orange", "accent-3");
+$link-color: $primary-color-dark;
+
+$roboto-font-path: "/assets/materialize/dist/fonts/roboto/";

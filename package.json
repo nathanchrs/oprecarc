@@ -1,0 +1,40 @@
+{
+  "name": "oprecarc",
+  "version": "0.1.0",
+  "description": "Web open recruitment dan training ARC ITB",
+  "main": "server.js",
+  "scripts": {
+    "lint": "semistandard",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "node-sass ./app/views/styles/oprecarc.scss ./public/dist/style.min.css --output-style=compressed",
+    "build": "npm run build-css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathanchrs/oprecarc.git"
+  },
+  "keywords": [
+    "ARC"
+  ],
+  "author": "ARC",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/nathanchrs/oprecarc/issues"
+  },
+  "homepage": "https://github.com/nathanchrs/oprecarc#readme",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "bower": "^1.7.9",
+    "config": "^1.21.0",
+    "express": "^4.14.0",
+    "knex": "^0.12.1",
+    "mysql": "^2.11.1",
+    "node-sass": "^4.1.0",
+    "passport": "^0.3.2",
+    "pug": "^2.0.0-beta6",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "semistandard": "^9.0.0"
+  }
+}

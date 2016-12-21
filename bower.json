@@ -1,0 +1,25 @@
+{
+  "name": "oprecarc",
+  "description": "Web open recruitment dan training ARC ITB",
+  "main": "server.js",
+  "authors": [
+    "ARC"
+  ],
+  "license": "GPL-2.0",
+  "keywords": [
+    "ARC"
+  ],
+  "homepage": "https://github.com/nathanchrs/oprecarc",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "^0.97.8",
+    "material-design-icons": "^3.0.1"
+  }
+}

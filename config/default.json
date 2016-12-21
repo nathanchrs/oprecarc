@@ -1,0 +1,28 @@
+{
+  "ip": "",
+  "port": 3000,
+
+  "knex": {
+    "client": "mysql",
+    "connection": {
+        "host"     : "127.0.0.1",
+        "user"     : "oprecarc",
+        "password" : "oprecarc",
+        "database" : "oprecarc",
+        "charset"  : "utf8"
+    },
+    "debug": true
+  },
+
+  "winston": {
+    "console": {
+      "level": "debug",
+      "prettyPrint": true,
+      "colorize": true,
+      "silent": false,
+      "timestamp": true
+    }
+  },
+  
+  "routePrefix": ""
+}
