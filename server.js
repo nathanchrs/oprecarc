@@ -32,8 +32,20 @@ app.set('view engine', 'pug');
 
 // Apply global Express middleware
 winston.log('verbose', 'Using Express static middleware...');
+
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('./app/components/session.js')
+var passport = require('./app/components/passport.js');
+
 app.use('/public', express.static('public'));
 app.use('/assets', express.static('bower_components'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Load and apply routes
 winston.log('verbose', 'Loading and applying routes...');
