@@ -38,6 +38,8 @@ Web pendukung open recruitment dan training ARC ITB
 - `knex migrate:latest` to update database according to schema in `migrations`.
 - `knex migrate:rollback` to rollback most recent migration.
 - `knex migrate:make <migration_name>` to create new migration.
+- `knex seed:make <seed_name>`
+- `knex seed:run`
 
 ## Todo
 

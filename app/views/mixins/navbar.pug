@@ -1,0 +1,26 @@
+mixin navbar()
+
+  nav(role='navigation')
+    div.nav-wrapper.container
+      a.brand-logo(href='/') #[img(src='/public/img/logo-dark.png')]
+      ul.right.hide-on-med-and-down
+        li
+          a(href='/posts') Posts
+        li
+          a(href='/users') People
+        li
+          a(href='/tasks') Tasks
+        li
+          a(href='/attendances') Attendance
+
+      ul.side-nav#nav-mobile
+        li
+          a(href='/posts') Posts
+        li
+          a(href='/users') People
+        li
+          a(href='/tasks') Tasks
+        li
+          a(href='/attendances') Attendance
+
+      a.button-collapse(href='#' data-activates='nav-mobile') #[i.material-icons menu]

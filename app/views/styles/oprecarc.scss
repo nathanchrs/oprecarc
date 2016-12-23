@@ -1,2 +1,23 @@
 @import "./materialize-variables.scss";
 @import "../../../bower_components/materialize/sass/materialize.scss";
+
+.pattern-background {
+  background-color: #fefefe;
+  background-image: linear-gradient(rgba(230,230,230,.3) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(230,230,230,.3) 1px, transparent 1px);
+  background-size: 6px 6px, 6px 6px, 6px 6px, 6px 6px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px
+}
+
+.brand-logo > img {
+  margin: 7px;
+  height: 50px;
+}
+
+/* Hide spinners on a number input field */
+input[type='number'] { -moz-appearance: textfield; }
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

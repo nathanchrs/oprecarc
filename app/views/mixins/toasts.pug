@@ -1,0 +1,6 @@
+mixin toasts
+  != '<script>'
+  if toasts
+    each message in toasts
+      != "Materialize.toast('" + (message + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0') + "', 4000);"
+  != '</script>'

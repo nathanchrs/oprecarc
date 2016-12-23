@@ -1,0 +1,26 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+    div.row
+      br
+      br
+      form.col.s12.m8.l6.offset-m2.offset-l3(action='/login', method='post')
+        div.card.white
+          div.card-content
+            h4.header.light.center Login
+            br
+
+            div.input-field
+              i.material-icons.prefix account_circle
+              input.validate(type='number', required, min=10000000, max=90000000, name='nim', value=oldInput ? oldInput['nim'] : '')
+              label(for='nim') NIM
+
+            div.input-field
+              i.material-icons.prefix lock
+              input.validate(type='password',required, name='password')
+              label(for='password') Password
+
+          div.card-action.center
+            button.btn.waves-effect.waves-light(type='submit') Login #[i.material-icons.right send]

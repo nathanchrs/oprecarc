@@ -1,0 +1,31 @@
+include ../mixins/navbar.pug
+include ../mixins/footer.pug
+include ../mixins/toasts.pug
+
+doctype html
+html
+  head
+    title ARC Recruitment &amp; Training
+    meta(http-equiv='Content-Type' content='text/html; charset=UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+
+    block fonts
+      link(href='/assets/material-design-icons/iconfont/material-icons.css' rel="stylesheet")
+
+    block styles
+      link(type='text/css' rel='stylesheet' href='/public/dist/style.min.css' media='screen,projection')
+
+  body.pattern-background
+
+    +navbar
+
+    block content
+
+    block scripts
+      script(type='text/javascript' src='/assets/jquery/dist/jquery.min.js')
+      script(type='text/javascript' src='/assets/materialize/dist/js/materialize.min.js')
+      script.
+        $(document).ready(function() {
+          $(".button-collapse").sideNav();
+        });
+      +toasts
