@@ -39,7 +39,8 @@ router.get('/register', function (req, res) {
 
 router.post('/register', function (req, res) {
   res.render('register');
-  // hash using bcryptjs: bcrypt.hash('password', 8, function(err, hash) { });
+  // TODO: create register form and handler
+  // hash password using bcryptjs: bcrypt.hash('password', 8, function(err, hash) { });
 });
 
 module.exports = router;

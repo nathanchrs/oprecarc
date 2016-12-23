@@ -3,24 +3,68 @@ mixin navbar()
   nav(role='navigation')
     div.nav-wrapper.container
       a.brand-logo(href='/') #[img(src='/public/img/logo-dark.png')]
+
       ul.right.hide-on-med-and-down
         li
           a(href='/posts') Posts
         li
-          a(href='/users') People
-        li
-          a(href='/tasks') Tasks
-        li
-          a(href='/attendances') Attendance
+          a(href='/events') Training
+
+        if currentUser
+          li
+            a(href='/users') People
+          li
+            a(href='/tasks') Tasks
+          li
+            a(href='/attendances') Attendance
+          li
+            a.dropdown-button(href='#!', data-activates='user-dropdown') #{currentUser.name} #[i.material-icons.right arrow_drop_down]
+        else
+          li
+            a(href='/login') Login
 
       ul.side-nav#nav-mobile
+
+        if currentUser
+          li
+            div.userView
+              div.background
+                img(src='/public/img/userview-background.jpg', style='width: 100%;')
+              form(action='/logout', method='post')
+                button.btn-floating.btn-large.right.waves-effect.waves-light(type='submit') #[i.material-icons lock]
+              a(href='/users/' + currentUser.nim)
+                img.circle(src='/public/img/user-placeholder.png')
+              a(href='/users/' + currentUser.nim)
+                span.white-text.name= currentUser.name
+                span.white-text.email= currentUser.nim
+              
         li
           a(href='/posts') Posts
         li
-          a(href='/users') People
-        li
-          a(href='/tasks') Tasks
-        li
-          a(href='/attendances') Attendance
+          a(href='/events') Training
+
+        if currentUser
+          li
+            a(href='/users') People
+          li
+            a(href='/tasks') Tasks
+          li
+            a(href='/attendances') Attendance
+
+        else
+          li
+            div.divider
+          li
+            a(href='/login') Login
 
       a.button-collapse(href='#' data-activates='nav-mobile') #[i.material-icons menu]
+
+
+  if currentUser
+    ul.dropdown-content#user-dropdown
+      li
+        a(href='/users/' + currentUser.nim) Profile
+      li
+        form(action='/logout', method='post')
+          button(type='submit') Logout
+
