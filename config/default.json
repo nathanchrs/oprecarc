@@ -12,7 +12,7 @@
         "database" : "oprecarc",
         "charset"  : "utf8"
     },
-    "debug": true
+    "debug": false
   },
 
   "winston": {
