@@ -4,7 +4,7 @@ var express = require('express');
 var auth = require('../components/auth.js');
 var passport = require('../components/passport.js');
 var winston = require('../components/winston.js');
-// var knex = require('../components/knex.js');
+var knex = require('../components/knex.js');
 
 var router = express.Router();
 router.baseRoute = '/';
@@ -49,6 +49,30 @@ router.post('/register', auth.isNotLoggedIn, function (req, res) {
   res.render('register');
   // TODO: create register form and handler
   // hash password using bcryptjs: bcrypt.hash('password', 8, function(err, hash) { });
+});
+
+router.get('/users', auth.isLoggedIn, function (req, res, next) {
+  knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
+    .from('users')
+    .filter(req.query, { nim: {}, name: {}, gender: {}, email: {}, phone: {}, line: {}, role: {} })
+    .pageAndSort(req.query.page, req.query.perPage, req.query.sort, ['nim', 'name', 'gender', 'email', 'phone', 'line', 'role', 'created_at', 'updated_at'])
+    .then(function (users) {
+      return res.json(users);
+      //return res.render('users', { users: users });
+    })
+    .catch(function (err) {
+      return next(err);
+    }); 
+});
+
+router.get('/users/:nim([0-9]{8})', auth.isLoggedIn, function (req, res, next) {
+  knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at').from('users')
+    .then(function (user) {
+      return res.render('profile', { user: user });
+    })
+    .catch(function (err) {
+      return next(err);
+    }); 
 });
 
 module.exports = router;
