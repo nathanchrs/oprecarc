@@ -35,7 +35,6 @@ winston.log('verbose', 'Using Express static middleware...');
 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var expressValidator = require('express-validator');
 var methodOverride = require('method-override');
 var session = require('./app/components/session.js');
 var passport = require('./app/components/passport.js');
@@ -48,7 +47,6 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
-app.use(expressValidator());
 app.use(session);
 app.use(flash());
 app.use(passport.initialize());

@@ -12,7 +12,7 @@ var sessionStore = new KnexSessionStore({
 
 module.exports = session({
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   secret: config.get('secret'),
   store: sessionStore
 });
