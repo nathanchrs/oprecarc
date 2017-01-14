@@ -48,7 +48,7 @@ router.post('/logout', auth.isLoggedIn, function (req, res) {
 router.get('/users', auth.isLoggedIn, function (req, res, next) {
   knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
     .from('users')
-    .filter(req.query, { nim: {}, name: {}, gender: {}, email: {}, phone: {}, line: {}, role: {} })
+    .search(req.query.search, ['nim', 'name', 'line', 'email'])
     .pageAndSort(req.query.page, req.query.perPage, req.query.sort, ['nim', 'name', 'gender', 'email', 'phone', 'line', 'role', 'created_at', 'updated_at'])
     .then(function (users) {
       return res.render('users', { users: users });

@@ -37,6 +37,27 @@ Object.getPrototypeOf(Knex.Client.prototype).filter = function (filterQuery, fil
   return query;
 };
 
+/* Extends Knex with basic searching support.
+ * Parameters:
+ * - search: search string
+ * - searchFields: array of field names to search in
+ */
+Object.getPrototypeOf(Knex.Client.prototype).search = function (search, searchFields) {
+  var query = this;
+  if (search) {
+    var first = true;
+    for (var searchFieldIndex in searchFields) {
+      if (first) {
+        query = query.where(searchFields[searchFieldIndex], 'like', '%' + search + '%');
+        first = false;
+      } else {
+        query = query.orWhere(searchFields[searchFieldIndex], 'like', '%' + search + '%');
+      }
+    }
+  }
+  return query;
+};
+
 /* Extends Knex with basic sorting and pagination support. Sorting will be executed first, then paging.
  * Parameters:
  * - page: the page number to retrieve (pages start from 1), default is 1

@@ -2,7 +2,7 @@
 @import "../../../bower_components/materialize/sass/materialize.scss";
 
 .pattern-background {
-  background-color: #fefefe;
+  background-color: #fafafa;
   background-image: linear-gradient(rgba(230,230,230,.3) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(230,230,230,.3) 1px, transparent 1px);
   background-size: 6px 6px, 6px 6px, 6px 6px, 6px 6px;
@@ -34,4 +34,27 @@ input[type='number']::-webkit-outer-spin-button {
   display: block;
   line-height: 22px;
   padding: (($dropdown-item-height - 22) / 2) 16px;
+}
+
+.page-header {
+  margin-top: 5px;
+  margin-bottom: 0;
+
+  .btn-floating {
+    vertical-align: bottom;
+    margin-bottom: 27px;
+    margin-right: 12px;
+  }
+
+  h1 {
+    font-weight: 300;
+    font-size: 2.5em;
+    display: inline-block;
+  }
+
+  @media(min-width: 601px) {
+    form {
+      margin-top: 25px;
+    }
+  }
 }

@@ -1,0 +1,54 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12.m7.l8
+        a.btn-floating.waves-effect.waves-light.orange(href='/users/create')
+          i.material-icons add
+        h1 Users
+      div.col.s12.m5.l4
+        form(method='get')
+          if req.query.sort
+            input(type= 'hidden', name= 'sort', value= req.query.sort)
+          if req.query.perPage
+            input(type= 'hidden', name= 'perPage', value= req.query.perPage)
+          input(type='text', name='search', value= req.query.search ? req.query.search : '', placeholder='Search')
+          button.btn-flat.hide(type='submit') #[i.material-icons search]
+    div.row
+      div.card.white
+        div.card-content
+          if users.data.length > 0
+            table.highlight
+              thead
+                tr
+                  each value, key in users.data[0]
+                    th= key
+              tbody
+                each user in users.data
+                  tr
+                    each value, key in user
+                      td= value
+
+    div.row
+      ul.pagination.s12.center
+        li(class= (users.currentPage === 1) ? 'disabled' : 'waves-effect')
+          - req.query.page = users.currentPage - 1;
+          a(href='?' + qs.stringify(req.query))
+            i.material-icons chevron_left
+        - for (var i = Math.max(users.currentPage - 3, 1); i <= Math.min(users.currentPage + 3, users.lastPage); i++)
+          li(class= (i === users.currentPage) ? 'active' : 'waves-effect')
+            - req.query.page = i
+            a(href='?' + qs.stringify(req.query))= i
+        li(class= (users.currentPage === users.lastPage) ? 'disabled' : 'waves-effect')
+          - req.query.page = users.currentPage + 1
+          a(href='?' + qs.stringify(req.query))
+            i.material-icons chevron_right
+
+block append scripts
+  script.
+    $(document).ready(function() {
+      $('select').material_select();
+    });
