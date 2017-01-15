@@ -1,0 +1,17 @@
+//- data parameter object should contain currentPage and lastPage
+//- Requires qs module and Express req.query to be available for link construction
+
+mixin pagination(data)
+  ul.pagination
+    li(class= (data.currentPage === 1) ? 'disabled' : 'waves-effect')
+      - req.query.page = data.currentPage - 1;
+      a(href='?' + qs.stringify(req.query))
+        i.material-icons chevron_left
+    - for (var i = Math.max(data.currentPage - 3, 1); i <= Math.min(data.currentPage + 3, data.lastPage); i++)
+      li(class= (i === data.currentPage) ? 'active' : 'waves-effect')
+        - req.query.page = i
+        a(href='?' + qs.stringify(req.query))= i
+    li(class= (data.currentPage === data.lastPage) ? 'disabled' : 'waves-effect')
+      - req.query.page = data.currentPage + 1
+      a(href='?' + qs.stringify(req.query))
+        i.material-icons chevron_right

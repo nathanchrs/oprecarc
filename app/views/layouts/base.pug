@@ -1,6 +1,8 @@
 include ../mixins/navbar.pug
 include ../mixins/footer.pug
 include ../mixins/toasts.pug
+include ../mixins/pagination.pug
+include ../mixins/forms.pug
 
 doctype html
 html
@@ -24,8 +26,13 @@ html
     block scripts
       script(type='text/javascript' src='/assets/jquery/dist/jquery.min.js')
       script(type='text/javascript' src='/assets/materialize/dist/js/materialize.min.js')
+
       script.
         $(document).ready(function() {
+          // Initialize Materialize mobile sidebar
           $(".button-collapse").sideNav();
+          // Initialize Materialize selects
+          $('select').material_select();
         });
+
       +toasts

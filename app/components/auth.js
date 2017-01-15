@@ -30,7 +30,7 @@ auth.role = function (roles) {
   if (typeof roles === 'string') roles = [roles];
   return function (req, res, next) {
     if (!req.user) return redirectToLogin(req, res);
-    if (!_.contains(roles, req.user.role)) return authFailedResponse(req, res);
+    if (!_.includes(roles, req.user.role)) return authFailedResponse(req, res);
     next();
   };
 };

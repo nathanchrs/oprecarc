@@ -1,4 +1,6 @@
-mixin navbar()
+//- Requires currentUser variable
+
+mixin navbar
 
   nav(role='navigation')
     div.nav-wrapper.container
@@ -12,7 +14,7 @@ mixin navbar()
 
         if currentUser
           li
-            a(href='/users') People
+            a(href='/users') Users
           li
             a(href='/tasks') Tasks
           li
@@ -45,7 +47,7 @@ mixin navbar()
 
         if currentUser
           li
-            a(href='/users') People
+            a(href='/users') Users
           li
             a(href='/tasks') Tasks
           li

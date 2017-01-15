@@ -10,13 +10,8 @@ block content
           i.material-icons add
         h1 Users
       div.col.s12.m5.l4
-        form(method='get')
-          if req.query.sort
-            input(type= 'hidden', name= 'sort', value= req.query.sort)
-          if req.query.perPage
-            input(type= 'hidden', name= 'perPage', value= req.query.perPage)
-          input(type='text', name='search', value= req.query.search ? req.query.search : '', placeholder='Search')
-          button.btn-flat.hide(type='submit') #[i.material-icons search]
+        +searchForm
+
     div.row
       div.card.white
         div.card-content
@@ -31,24 +26,9 @@ block content
                   tr
                     each value, key in user
                       td= value
+          else
+            i No data available.
 
     div.row
-      ul.pagination.s12.center
-        li(class= (users.currentPage === 1) ? 'disabled' : 'waves-effect')
-          - req.query.page = users.currentPage - 1;
-          a(href='?' + qs.stringify(req.query))
-            i.material-icons chevron_left
-        - for (var i = Math.max(users.currentPage - 3, 1); i <= Math.min(users.currentPage + 3, users.lastPage); i++)
-          li(class= (i === users.currentPage) ? 'active' : 'waves-effect')
-            - req.query.page = i
-            a(href='?' + qs.stringify(req.query))= i
-        li(class= (users.currentPage === users.lastPage) ? 'disabled' : 'waves-effect')
-          - req.query.page = users.currentPage + 1
-          a(href='?' + qs.stringify(req.query))
-            i.material-icons chevron_right
-
-block append scripts
-  script.
-    $(document).ready(function() {
-      $('select').material_select();
-    });
+      div.center
+        +pagination(users)

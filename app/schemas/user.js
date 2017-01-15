@@ -8,8 +8,8 @@ module.exports = {
     gender: Joi.string().regex(/^(male|female)$/).required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
-    line: Joi.string().default(''),
-    bio: Joi.string().default('')
+    line: Joi.string().default('').allow(''),
+    bio: Joi.string().default('').allow('')
   }),
 
   userUpdateAdminSchema: Joi.object().keys({
@@ -17,8 +17,8 @@ module.exports = {
     gender: Joi.string().regex(/^(male|female)$/).required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
-    line: Joi.string().default(''),
-    bio: Joi.string().default(''),
+    line: Joi.string().default('').allow(''),
+    bio: Joi.string().default('').allow(''),
     role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
   })
 };

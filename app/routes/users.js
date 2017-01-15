@@ -68,11 +68,11 @@ router.get('/users/:nim([0-9]{8})', auth.isLoggedIn, function (req, res, next) {
     }); 
 });
 
-router.get('/users/create', auth.isNotLoggedIn, function (req, res) {
-  res.render('user-create');
+router.get('/users/create', auth.role('admin'), function (req, res) {
+  res.render('user-edit');
 });
 
-router.post('/users', auth.isNotLoggedIn, function (req, res, next) {
+router.post('/users', auth.role('admin'), function (req, res, next) {
   // TODO: create register form and handler
   // hash password using bcryptjs: bcrypt.hash('password', 8, function(err, hash) { });
 });
@@ -93,12 +93,12 @@ router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin, function (req, res, 
   if (input.error) return validation.errorRedirect(input.error, '/users/' + req.params.nim + '/edit', req, res);
 
   var updateData = {
-    name: input.name,
-    gender: input.gender,
-    email: input.email,
-    phone: input.phone,
-    line: input.line,
-    bio: input.bio,
+    name: input.value.name,
+    gender: input.value.gender,
+    email: input.value.email,
+    phone: input.value.phone,
+    line: input.value.line,
+    bio: input.value.bio,
     updated_at: new Date()
   };
   if (req.user.role === 'admin') updateData.role = input.role;

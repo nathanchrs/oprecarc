@@ -1,0 +1,60 @@
+//- Optionally requires oldInput, validationError variable
+//- Requires _ (Lodash) get, find function
+
+//- Parameters: name, type, value, placeholder, required, disabled
+mixin textBox(options)
+  input.validate(type= options.type || 'text', name= options.name, value= coalesce(_.get(oldInput, options.name), options.value), placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))
+
+//- Parameters: name, label, type, value, placeholder, required, disabled, type
+mixin textBoxField(options)
+  div.input-field
+    +textBox(options)
+    label(for= options.name)= options.label
+
+//- Parameters: name, value, placeholder, required, disabled
+mixin textArea(options)
+  textarea.materialize-textarea(name= options.name, placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))= coalesce(_.get(oldInput, options.name), options.value)
+
+//- Parameters: name, label, value, placeholder, required, disabled
+mixin textAreaField(options)
+  div.input-field
+    +textArea(options)
+    label(for= options.name)= options.label
+
+//- Parameters: name, value, options, placeholder, required, disabled
+//- options is an array of objects containing value, description, and disabled
+mixin select(options)
+  select(name= options.name, required= options.required, disabled= options.disabled)
+    if options.placeholder
+      option(value= '', selected= ('' === coalesce(_.get(oldInput, options.name), options.value, '')), disabled)= options.placeholder
+    each option in options.options
+      option(value= option.value, selected= (option.value == options.value), disabled= option.disabled)= option.description
+
+//- Parameters: name, label, value, options, placeholder, required, disabled
+mixin selectField(options)
+  div.input-field
+    +select(options)
+    label(for= options.name)= options.label
+
+//- Add in $(document).ready(function ...) script to initialize selects: $('select').material_select();
+
+//- Parameters: name, value, checked, disabled, label
+mixin radioButton(options)
+  p
+    input.with-gap(type= 'radio', name= options.name, checked= coalesce(_.get(oldInput, options.name), options.checked), disabled= options.disabled)
+    label(for= options.name)= options.label
+
+mixin submitButton(options)
+  button.btn.waves-effect.waves-light(type='submit') #{options.label} #[i.material-icons.right send]
+
+//- Optionally requires req.query.search, req.query.sort, req.query.perPage and oldInput
+//- Will submit to the current page
+
+mixin searchForm
+  form(method='get')
+    if req.query.sort
+      input(type= 'hidden', name= 'sort', value= req.query.sort)
+    if req.query.perPage
+      input(type= 'hidden', name= 'perPage', value= req.query.perPage)
+    +textBox({ name: 'search', value: req.query.search, placeholder: 'Search' })
+    button.btn-flat.hide(type='submit') #[i.material-icons search]

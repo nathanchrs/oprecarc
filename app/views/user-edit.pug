@@ -1,0 +1,38 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        if user
+          h1 Edit user #[small= '- ' + user.nim]
+        else
+          h1 Create user
+
+    div.row
+      div.card.white
+        form(action= '/users' + (user ? '/' + user.nim + '?_method=put' : ''), method= 'post')
+
+          div.card-content
+            +textBoxField({ name: 'name', label: 'Name', value: _.get(user, 'name'), required: true })
+            +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: [
+              { value: 'male', description: 'Male' },
+              { value: 'female', description: 'Female' }
+            ]})
+            +textBoxField({ name: 'email', label: 'Email', type: 'email', value: _.get(user, 'email'), required: true })
+            +textBoxField({ name: 'phone', label: 'Phone', value: _.get(user, 'phone'), required: true })
+            +textBoxField({ name: 'line', label: 'LINE ID', value: _.get(user, 'line') })
+            +textAreaField({ name: 'bio', label: 'Bio', value: _.get(user, 'bio') })
+
+            if currentUser.role === 'admin'
+              +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: [
+                { value: 'kru', description: 'Kru' },
+                { value: 'cakru', description: 'Cakru' },
+                { value: 'admin', description: 'Admin' }
+              ]})
+
+          div.card-action
+            +submitButton({ label: 'Save' })
+  
