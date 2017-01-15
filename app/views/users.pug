@@ -6,7 +6,7 @@ block content
 
     div.row.page-header
       div.col.s12.m7.l8
-        a.btn-floating.waves-effect.waves-light.orange(href='/users/create')
+        a.btn-floating.waves-effect.waves-light(href='/users/create')
           i.material-icons add
         h1 Users
       div.col.s12.m5.l4
@@ -21,11 +21,20 @@ block content
                 tr
                   each value, key in users.data[0]
                     th= key
+                  th Actions
               tbody
                 each user in users.data
-                  tr
+                  tr(onclick= 'window.location="/users/' + user.nim + '"')
                     each value, key in user
                       td= value
+                    td.actions
+                      a.btn-list(href= '/users/' + user.nim)
+                        i.material-icons zoom_in
+                      a.btn-list(href= '/users/' + user.nim + '/edit')
+                        i.material-icons edit
+                      form(action='/users/' + user.nim + '?_method=delete', method='post')
+                        button(type='submit', onclick='return confirm("Are you sure you want to delete user ' + user.nim + '?")').btn-list
+                          i.material-icons delete
           else
             i No data available.
 

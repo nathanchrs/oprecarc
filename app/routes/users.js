@@ -114,6 +114,7 @@ router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin, function (req, res, 
 });
 
 router.delete('/users/:nim([0-9]{8})', auth.role('admin'), function (req, res, next) {
+  if (req.user.nim == req.params.nim) return res.sendStatus(403);
   knex('users').where('nim', req.params.nim).del()
     .then(function (affectedRowCount) {
       if (affectedRowCount > 0) {

@@ -58,3 +58,15 @@ input[type='number']::-webkit-outer-spin-button {
     }
   }
 }
+
+.btn-list {
+  @extend .btn-flat;
+  padding: 0px 2px;
+}
+
+td.actions {
+  white-space: nowrap;
+  form {
+    display: inline;
+  }
+}

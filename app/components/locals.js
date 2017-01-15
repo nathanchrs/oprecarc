@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var qs = require('qs');
+var moment = require('moment');
 
 /* Utility function that returns first non-null and non-undefined element from its parameters.
  * If an empty values array is given, undefined is returned.
@@ -26,6 +27,7 @@ module.exports = function (req, res, next) {
   res.locals.coalesce = coalesce;
   res.locals._ = _;
   res.locals.qs = qs;
+  res.locals.moment = moment;
   res.locals.req = req;
   next();
 };
