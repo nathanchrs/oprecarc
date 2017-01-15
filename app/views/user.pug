@@ -1,0 +1,57 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        a.btn-floating.waves-effect.waves-light(href='/users/' + user.nim + '/edit')
+          i.material-icons edit
+        form.inline(action='/users/' + user.nim + '?_method=delete', method='post')
+          button.btn-floating.waves-effect.waves-light.red(type='submit', onclick='return confirm("Are you sure you want to delete user ' + user.nim + '?")')
+            i.material-icons delete
+        h1 #{user.name} #[small= user.nim]
+
+    div.row
+      div.card.white
+        div.card-content
+          div.row
+
+            div.col.s12.m6
+
+              div.data-field
+                label Name
+                p= user.name
+
+              div.data-field
+                label Gender
+                p= user.gender
+
+              div.data-field
+                label Email
+                p= user.email
+
+              div.data-field
+                label Phone
+                p= user.phone
+
+              div.data-field
+                label LINE ID
+                p= user.line
+
+            div.col.s12.m6
+
+              div.data-field
+                label Bio
+                p= user.bio
+
+              div.data-field
+                label Role
+                p= user.role
+
+              div.data-field
+                label Last updated
+                p= user.updated_at
+
+      

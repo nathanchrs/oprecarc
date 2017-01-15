@@ -41,9 +41,10 @@ input[type='number']::-webkit-outer-spin-button {
   margin-bottom: 0;
 
   .btn-floating {
-    vertical-align: bottom;
-    margin-bottom: 27px;
+    vertical-align: top;
+    margin-top: 2.06rem;
     margin-right: 12px;
+    margin-bottom: -12px;
   }
 
   h1 {
@@ -66,7 +67,12 @@ input[type='number']::-webkit-outer-spin-button {
 
 td.actions {
   white-space: nowrap;
-  form {
-    display: inline;
-  }
+}
+
+form.inline {
+  display: inline;
+}
+
+.data-field {
+  margin-bottom: 8px;
 }
