@@ -59,7 +59,9 @@ router.get('/users', auth.isLoggedIn, function (req, res, next) {
 });
 
 router.get('/users/:nim([0-9]{8})', auth.isLoggedIn, function (req, res, next) {
-  knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at').from('users')
+  knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
+    .where('nim', req.params.nim)
+    .from('users')
     .then(function (user) {
       return res.render('user', { user: user });
     })
@@ -78,7 +80,8 @@ router.post('/users', auth.role('admin'), function (req, res, next) {
 });
 
 router.get('/users/:nim([0-9]{8})/edit', auth.isNimOwnerOrAdmin, function (req, res, next) {
-  knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at').from('users')
+  knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
+  .where('nim', req.params.nim).from('users')
     .then(function (user) {
       return res.render('user-edit', { user: user });
     })
