@@ -53,6 +53,6 @@ block content
 
               div.data-field
                 label Last updated
-                p= user.updated_at
+                p= moment(user.updated_at).format('dddd,  D MMMM YYYY, HH:mm:ss')
 
       
