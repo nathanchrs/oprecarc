@@ -16,6 +16,10 @@ block content
         form(action= '/users' + (user ? '/' + user.nim + '?_method=put' : ''), method= 'post')
 
           div.card-content
+            if (!user)
+              +textBoxField({ name: 'nim', label: 'NIM', type: 'number', required: true })
+              +textBoxField({ name: 'password', label: 'Password', type: 'password', required: true })
+
             +textBoxField({ name: 'name', label: 'Name', value: _.get(user, 'name'), required: true })
             +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: [
               { value: 'male', description: 'Male' },
@@ -26,7 +30,7 @@ block content
             +textBoxField({ name: 'line', label: 'LINE ID', value: _.get(user, 'line') })
             +textAreaField({ name: 'bio', label: 'Bio', value: _.get(user, 'bio') })
 
-            if currentUser.role === 'admin'
+            if currentUser && currentUser.role === 'admin'
               +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: [
                 { value: 'kru', description: 'Kru' },
                 { value: 'cakru', description: 'Cakru' },
