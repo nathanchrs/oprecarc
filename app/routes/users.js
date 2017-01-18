@@ -26,7 +26,7 @@ router.post('/login', acl.check('login'), function (req, res, next) {
     req.login(user, function (err) {
       if (err) return next(err);
       winston.log('verbose', 'User ' + user.name + ' (' + user.nim + ') logged in.');
-      req.flash('info', 'Selamat datang, ' + user.name, '!');
+      req.flash('info', 'Welcome back, ' + user.name, '!');
       var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
       delete req.session.redirectTo;
       req.user = user;
@@ -39,7 +39,7 @@ router.post('/logout', acl.check('logout'), function (req, res) {
   var loggedOutUser = req.user;
   req.logout();
   winston.log('verbose', 'User ' + loggedOutUser.name + ' (' + loggedOutUser.nim + ') logged out.');
-  req.flash('info', 'Logout berhasil.');
+  req.flash('info', 'You are logged out.');
   res.redirect('/login');
 });
 
@@ -108,7 +108,7 @@ router.post('/users', acl.check('user-create'),
             return res.redirect('/users/' + req.input.nim);
           } else {
             winston.log('verbose', 'User with NIM ' + req.input.nim + ' registered.');
-            req.flash('info', 'Registration successful, you can now log in.');
+            req.flash('info', 'Registration successful. Welcome, ' + req.input.name + '!');
             return res.redirect('/login');
           }
         })

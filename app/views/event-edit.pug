@@ -1,0 +1,27 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        if event
+          h1 Edit event #[small= '- ' + event.name]
+        else
+          h1 Create event
+
+    div.row
+      div.card.white
+        form(action= '/events' + (event ? '/' + event.id + '?_method=put' : ''), method= 'post')
+
+          div.card-content
+            +textBoxField({ name: 'name', label: 'Name', value: _.get(event, 'name'), required: true })
+            +textBoxField({ name: 'start_time', label: 'Start time', value: _.get(event, 'start_time'), required: true, placeholder: '1 Jan 2017 21:00' })
+            +textBoxField({ name: 'end_time', label: 'End time', value: _.get(event, 'end_time'), required: true, placeholder: '1 Jan 2017 21:00' })
+            +textBoxField({ name: 'late_time', label: 'Late time', value: _.get(event, 'late_time'), required: true, placeholder: '1 Jan 2017 21:00' })
+            +textAreaField({ name: 'description', label: 'Description (Github-Flavored Markdown available)', value: _.get(event, 'description') })
+
+          div.card-action
+            +submitButton({ label: 'Save' })
+  

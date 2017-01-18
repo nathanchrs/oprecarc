@@ -16,7 +16,9 @@ var constants = {
     kru: 'Kru',
     cakru: 'Cakru',
     admin: 'Admin'
-  }
+  },
+
+  longDateTimeFormat: 'dddd,  D MMMM YYYY, HH:mm:ss'
 };
 
 /* Utility functions */

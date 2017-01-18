@@ -56,7 +56,7 @@ router.post('/events', acl.check('event-create'),
     .then(function () {
       winston.log('verbose', 'New event with name ' + req.input.name + ' created by ' + req.user.nim + '.');
       req.flash('info', 'Event created.');
-      return res.redirect('/login');
+      return res.redirect('/events');
     })
     .catch(function (err) {
       return next(err);

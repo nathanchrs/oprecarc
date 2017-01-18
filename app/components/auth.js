@@ -33,10 +33,11 @@ auth.isNotLoggedIn = function (req, res, next) {
 };
 
 auth.role = function (roles) {
+  var _auth = this;
   if (typeof roles === 'string') roles = [roles];
   return function (req, res, next) {
-    if (!req.user) return this.response.redirectToLogin(req, res);
-    if (!_.includes(roles, req.user.role)) return this.response.failed(req, res);
+    if (!req.user) return _auth.response.redirectToLogin(req, res);
+    if (!_.includes(roles, req.user.role)) return _auth.response.failed(req, res);
     next();
   };
 };

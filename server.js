@@ -33,7 +33,6 @@ app.set('view engine', 'pug');
 // Apply global Express middleware
 winston.log('verbose', 'Using Express static middleware...');
 
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('./app/components/session.js');
@@ -43,7 +42,6 @@ var locals = require('./app/components/locals.js');
 
 app.use('/public', express.static('public'));
 app.use('/assets', express.static('bower_components'));
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));

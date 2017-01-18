@@ -9,13 +9,22 @@ module.exports = {
     default: Joi.object().keys({
       name: Joi.string().required(),
       start_time: Joi.date(),
-      end_time: Joi.date(),
-      late_time: Joi.date(),
+      end_time: Joi.date().min(Joi.ref('start_time')),
+      late_time: Joi.date().min(Joi.ref('start_time')).max(Joi.ref('end_time')),
       description: Joi.string().default('').allow('')
     })
   },
 
-  'event-edit': this['event-create']
+  'event-edit': {
+
+    default: Joi.object().keys({
+      name: Joi.string().required(),
+      start_time: Joi.date(),
+      end_time: Joi.date().min(Joi.ref('start_time')),
+      late_time: Joi.date().min(Joi.ref('start_time')).max(Joi.ref('end_time')),
+      description: Joi.string().default('').allow('')
+    })
+  }
 };
 
 

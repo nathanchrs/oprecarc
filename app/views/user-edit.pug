@@ -29,7 +29,7 @@ block content
             if req.user && req.user.role === 'admin'
               +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: utils.toOptionArray(constants.roles) })
 
-            +textAreaField({ name: 'bio', label: 'Bio (Github-Flavored Markdown syntax available)', value: _.get(user, 'bio') })
+            +textAreaField({ name: 'bio', label: 'Bio (Github-Flavored Markdown available)', value: _.get(user, 'bio') })
 
           div.card-action
             +submitButton({ label: 'Save' })

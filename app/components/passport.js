@@ -13,11 +13,11 @@ passport.use(new LocalStrategy ({
     knex.first('nim', 'name', 'role', 'email', 'password').from('users').where('nim', nim)
       .then(function (user) {
         if (!user) {
-          return done(null, false, { message: 'NIM atau password salah.' });
+          return done(null, false, { message: 'Wrong NIM or password.' });
         }
         bcrypt.compare(password, user.password, function (err, res) {
           if (err) return done(err);
-          if (!res) return done(null, false, { message: 'NIM atau password salah.' });
+          if (!res) return done(null, false, { message: 'Wrong NIM or password.' });
           return done(null, user);
         });
       })
