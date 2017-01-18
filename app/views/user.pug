@@ -25,10 +25,6 @@ block content
                 p= user.name
 
               div.data-field
-                label Gender
-                p= user.gender
-
-              div.data-field
                 label Email
                 p= user.email
 
@@ -43,16 +39,25 @@ block content
             div.col.s12.m6
 
               div.data-field
-                label Bio
-                p= user.bio
-                // TODO: enable multiline bio (using Markdown?)
+                label Gender
+                p= _.get(constants.genders, user.gender, '')
 
               div.data-field
                 label Role
-                p= user.role
+                p= _.get(constants.roles, user.role, '')
 
               div.data-field
-                label Last updated
+                label Created at
+                p= moment(user.created_at).format('dddd,  D MMMM YYYY, HH:mm:ss')
+
+              div.data-field
+                label Updated at
                 p= moment(user.updated_at).format('dddd,  D MMMM YYYY, HH:mm:ss')
+
+          div.row
+            div.col.s12
+              label Bio
+              div.divider
+              div.markdown-field!= marked(user.bio)
 
       

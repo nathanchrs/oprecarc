@@ -3,7 +3,7 @@
 
 //- Parameters: name, type, value, placeholder, required, disabled
 mixin textBox(options)
-  input.validate(type= options.type || 'text', name= options.name, value= coalesce(_.get(oldInput, options.name), options.value), placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))
+  input.validate(type= options.type || 'text', name= options.name, value= utils.coalesce(_.get(oldInput, options.name), options.value), placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))
 
 //- Parameters: name, label, type, value, placeholder, required, disabled, type
 mixin textBoxField(options)
@@ -13,7 +13,7 @@ mixin textBoxField(options)
 
 //- Parameters: name, value, placeholder, required, disabled
 mixin textArea(options)
-  textarea.materialize-textarea(name= options.name, placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))= coalesce(_.get(oldInput, options.name), options.value)
+  textarea.materialize-textarea(name= options.name, placeholder= options.placeholder, required= options.required, disabled= options.disabled, class= (_.find(_.get(validationError, 'details'), { path: options.name }) ? 'invalid' : ''))= utils.coalesce(_.get(oldInput, options.name), options.value)
 
 //- Parameters: name, label, value, placeholder, required, disabled
 mixin textAreaField(options)
@@ -26,7 +26,7 @@ mixin textAreaField(options)
 mixin select(options)
   select(name= options.name, required= options.required, disabled= options.disabled)
     if options.placeholder
-      option(value= '', selected= ('' === coalesce(_.get(oldInput, options.name), options.value, '')), disabled)= options.placeholder
+      option(value= '', selected= ('' === utils.coalesce(_.get(oldInput, options.name), options.value, '')), disabled)= options.placeholder
     each option in options.options
       option(value= option.value, selected= (option.value == options.value), disabled= option.disabled)= option.description
 
@@ -41,7 +41,7 @@ mixin selectField(options)
 //- Parameters: name, value, checked, disabled, label
 mixin radioButton(options)
   p
-    input.with-gap(type= 'radio', name= options.name, checked= coalesce(_.get(oldInput, options.name), options.checked), disabled= options.disabled)
+    input.with-gap(type= 'radio', name= options.name, checked= utils.coalesce(_.get(oldInput, options.name), options.checked), disabled= options.disabled)
     label(for= options.name)= options.label
 
 mixin submitButton(options)

@@ -62,7 +62,7 @@ fs.readdirSync(routeDirectory).forEach(function (file) {
     winston.log('verbose', routerPath);
     var router = require(routerPath);
     var routerName = path.basename(routerPath, path.extname(routerPath));
-    if (!router.baseRoute) router.baseRoute = '/' + routerName;
+    if (!router.baseRoute) router.baseRoute = '/';
     var completeRoute = config.get('routePrefix') + router.baseRoute;
     winston.log('verbose', 'Using route %s...', completeRoute);
     app.use(completeRoute, router);

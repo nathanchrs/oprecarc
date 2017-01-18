@@ -22,8 +22,15 @@ block content
                 thead
                   tr
                     th.compact
-                    each value, key in users.data[0]
-                      th.compact= key
+                    th.compact NIM
+                    th.compact Name
+                    th.compact Gender
+                    th.compact Email
+                    th.compact Phone
+                    th.compact LINE
+                    th.compact Role
+                    th.compact Created at
+                    th.compact Updated at
                 tbody
                   each user in users.data
                     tr(onclick= 'window.location="/users/' + user.nim + '"')
@@ -35,8 +42,15 @@ block content
                         form.inline(action='/users/' + user.nim + '?_method=delete', method='post')
                           button(type='submit', onclick='return confirm("Are you sure you want to delete user ' + user.nim + '?")').btn-list
                             i.material-icons delete
-                      each value, key in user
-                        td.compact= value
+                      td.compact= user.nim
+                      td.compact= user.name
+                      td.compact= _.get(constants.genders, user.gender, '')
+                      td.compact= user.email
+                      td.compact= user.phone
+                      td.compact= user.line
+                      td.compact= _.get(constants.roles, user.role, '')
+                      td.compact= moment(user.created_at).fromNow()
+                      td.compact= moment(user.updated_at).fromNow()
           else
             i No data available.
 

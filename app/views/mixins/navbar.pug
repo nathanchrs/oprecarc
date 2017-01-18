@@ -1,4 +1,4 @@
-//- Requires currentUser variable
+//- Requires req.user variable
 
 mixin navbar
 
@@ -12,7 +12,7 @@ mixin navbar
         li
           a(href='/events') Training
 
-        if currentUser
+        if req.user
           li
             a(href='/users') Users
           li
@@ -20,32 +20,32 @@ mixin navbar
           li
             a(href='/attendances') Attendance
           li
-            a.dropdown-button(href='#!', data-activates='user-dropdown') #{currentUser.name} #[i.material-icons.right arrow_drop_down]
+            a.dropdown-button(href='#!', data-activates='user-dropdown') #{req.user.name} #[i.material-icons.right arrow_drop_down]
         else
           li
             a(href='/login') Login
 
       ul.side-nav#nav-mobile
 
-        if currentUser
+        if req.user
           li
             div.userView
               div.background
                 img(src='/public/img/userview-background.jpg', style='width: 100%;')
               form(action='/logout', method='post')
                 button.btn-floating.btn-large.right.waves-effect.waves-light(type='submit') #[i.material-icons lock]
-              a(href='/users/' + currentUser.nim)
+              a(href='/users/' + req.user.nim)
                 img.circle(src='/public/img/user-placeholder.png')
-              a(href='/users/' + currentUser.nim)
-                span.white-text.name= currentUser.name
-                span.white-text.email= currentUser.nim
+              a(href='/users/' + req.user.nim)
+                span.white-text.name= req.user.name
+                span.white-text.email= req.user.nim
               
         li
           a(href='/posts') Posts
         li
           a(href='/events') Training
 
-        if currentUser
+        if req.user
           li
             a(href='/users') Users
           li
@@ -62,10 +62,10 @@ mixin navbar
       a.button-collapse(href='#' data-activates='nav-mobile') #[i.material-icons menu]
 
 
-  if currentUser
+  if req.user
     ul.dropdown-content#user-dropdown
       li
-        a(href='/users/' + currentUser.nim) Profile
+        a(href='/users/' + req.user.nim) Profile
       li
         form(action='/logout', method='post')
           button(type='submit') Logout

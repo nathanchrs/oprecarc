@@ -12,15 +12,8 @@ block content
             h4.header.light.center Login
             br
 
-            div.input-field
-              i.material-icons.prefix account_circle
-              input.validate(type='number', required, min=10000000, max=90000000, name='nim', value=oldInput ? oldInput['nim'] : '')
-              label(for='nim') NIM
-
-            div.input-field
-              i.material-icons.prefix lock
-              input.validate(type='password', required, name='password')
-              label(for='password') Password
+            +textBoxField({ name: 'nim', label: 'NIM', type: 'number', required: true })
+            +textBoxField({ name: 'password', label: 'Password', type: 'password', required: true })
 
           div.card-action.center
             button.btn.waves-effect.waves-light(type='submit') Login #[i.material-icons.right send]

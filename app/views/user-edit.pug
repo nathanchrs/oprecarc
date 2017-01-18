@@ -21,21 +21,15 @@ block content
               +textBoxField({ name: 'password', label: 'Password', type: 'password', required: true })
 
             +textBoxField({ name: 'name', label: 'Name', value: _.get(user, 'name'), required: true })
-            +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: [
-              { value: 'male', description: 'Male' },
-              { value: 'female', description: 'Female' }
-            ]})
+            +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: utils.toOptionArray(constants.genders) })
             +textBoxField({ name: 'email', label: 'Email', type: 'email', value: _.get(user, 'email'), required: true })
             +textBoxField({ name: 'phone', label: 'Phone', value: _.get(user, 'phone'), required: true })
             +textBoxField({ name: 'line', label: 'LINE ID', value: _.get(user, 'line') })
-            +textAreaField({ name: 'bio', label: 'Bio', value: _.get(user, 'bio') })
 
-            if currentUser && currentUser.role === 'admin'
-              +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: [
-                { value: 'kru', description: 'Kru' },
-                { value: 'cakru', description: 'Cakru' },
-                { value: 'admin', description: 'Admin' }
-              ]})
+            if req.user && req.user.role === 'admin'
+              +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: utils.toOptionArray(constants.roles) })
+
+            +textAreaField({ name: 'bio', label: 'Bio (Github-Flavored Markdown syntax available)', value: _.get(user, 'bio') })
 
           div.card-action
             +submitButton({ label: 'Save' })

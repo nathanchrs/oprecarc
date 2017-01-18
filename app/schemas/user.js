@@ -4,28 +4,6 @@ var Joi = require('joi');
 
 module.exports = {
 
-  'user-edit': {
-
-    default: Joi.object().keys({
-      name: Joi.string().required(),
-      gender: Joi.string().regex(/^(male|female)$/).required(),
-      email: Joi.string().email().required(),
-      phone: Joi.string().required(),
-      line: Joi.string().default('').allow(''),
-      bio: Joi.string().default('').allow('')
-    }),
-
-    'admin': Joi.object().keys({
-      name: Joi.string().required(),
-      gender: Joi.string().regex(/^(male|female)$/).required(),
-      email: Joi.string().email().required(),
-      phone: Joi.string().required(),
-      line: Joi.string().default('').allow(''),
-      bio: Joi.string().default('').allow(''),
-      role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
-    })
-  },
-
   'user-create': {
 
     default: Joi.object().keys({
@@ -50,8 +28,29 @@ module.exports = {
       bio: Joi.string().default('').allow(''),
       role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
     })
-  }
+  },
 
+  'user-edit': {
+
+    default: Joi.object().keys({
+      name: Joi.string().required(),
+      gender: Joi.string().regex(/^(male|female)$/).required(),
+      email: Joi.string().email().required(),
+      phone: Joi.string().required(),
+      line: Joi.string().default('').allow(''),
+      bio: Joi.string().default('').allow('')
+    }),
+
+    'admin': Joi.object().keys({
+      name: Joi.string().required(),
+      gender: Joi.string().regex(/^(male|female)$/).required(),
+      email: Joi.string().email().required(),
+      phone: Joi.string().required(),
+      line: Joi.string().default('').allow(''),
+      bio: Joi.string().default('').allow(''),
+      role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
+    })
+  }
 };
 
 

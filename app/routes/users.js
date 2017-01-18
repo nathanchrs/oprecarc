@@ -9,7 +9,6 @@ var validation = require('../components/validation.js');
 var bcrypt = require('bcryptjs');
 
 var router = express.Router();
-router.baseRoute = '/';
 
 router.get('/login', acl.check('login'), function (req, res) {
   res.render('login');
@@ -45,7 +44,7 @@ router.post('/logout', acl.check('logout'), function (req, res) {
 });
 
 router.get('/users', acl.check('user-list'), function (req, res, next) {
-  knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
+  knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'role', 'created_at', 'updated_at')
     .from('users')
     .search(req.query.search, ['nim', 'name', 'line', 'email'])
     .pageAndSort(req.query.page, req.query.perPage, req.query.sort,
@@ -134,7 +133,6 @@ router.get('/users/:nim([0-9]{8})/edit', acl.check('user-edit'), function (req, 
     }); 
 });
 
-
 router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
   validation.validateBody('user-edit', function (req) { return '/users/' + req.params.nim + '/edit'; }),
   function (req, res, next) {
@@ -153,6 +151,7 @@ router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
   knex('users').where('nim', req.params.nim).update(updateData)
     .then(function (user) {
       winston.log('verbose', 'User with NIM ' + req.params.nim + ' modified by ' + req.user.nim + '.');
+      req.flash('info', 'User with NIM ' + req.params.nim + ' updated.');
       return res.redirect('/users/' + req.params.nim);
     })
     .catch(function (err) {
