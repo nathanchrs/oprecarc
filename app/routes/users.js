@@ -8,8 +8,6 @@ var knex = require('../components/knex.js');
 var validation = require('../components/validation.js');
 var bcrypt = require('bcryptjs');
 
-var userSchema = require('../schemas/user.js');
-
 var router = express.Router();
 router.baseRoute = '/';
 
@@ -50,7 +48,8 @@ router.get('/users', auth.isLoggedIn, function (req, res, next) {
   knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
     .from('users')
     .search(req.query.search, ['nim', 'name', 'line', 'email'])
-    .pageAndSort(req.query.page, req.query.perPage, req.query.sort, ['nim', 'name', 'gender', 'email', 'phone', 'line', 'role', 'created_at', 'updated_at'])
+    .pageAndSort(req.query.page, req.query.perPage, req.query.sort,
+      ['nim', 'name', 'gender', 'email', 'phone', 'line', 'role', 'created_at', 'updated_at'])
     .then(function (users) {
       return res.render('users', { users: users });
     })
@@ -79,41 +78,40 @@ router.get('/users/create', function (req, res) {
 });
 
 // Note: add auth.isLoggedIn middleware here to prevent non-registerd users form registering
-router.post('/users', function (req, res, next) {
+router.post('/users', validation.validateBody('user-create', '/users/create'), function (req, res, next) {
   if (req.user && req.user.role !== 'admin') return res.redirect('/'); // If not logged in yet, still can create user
 
-  var insertSchema = (req.user && req.user.role === 'admin') ? userSchema.userInsertAdminSchema : userSchema.userInsertSchema;
-  var input = validation.validate(req.body, insertSchema);
-  if (input.error) return validation.errorRedirect(input.error, '/users/create', req, res);
-
-  knex.select('nim').from('users').where('nim', input.value.nim).first()
+  knex.select('nim').from('users').where('nim', req.input.nim).first()
     .then(function (nim) {
-      if (nim) return validation.errorRedirect({ details: [{ message: 'NIM already exists.', path: 'nim' }], _object: req.body }, '/users/create', req, res);
+      if (nim) return validation.errorRedirect({
+          details: [{ message: 'NIM already exists.', path: 'nim' }],
+          _object: req.body
+        }, '/users/create', req, res);
 
-      bcrypt.hash(input.value.password, 8) // 8 is the salt length to generate
+      bcrypt.hash(req.input.password, 8) // 8 is the salt length to generate
         .then(function (hash) {
           var insertData = {
-            nim: input.value.nim,
-            name: input.value.name,
-            gender: input.value.gender,
-            email: input.value.email,
-            phone: input.value.phone,
-            line: input.value.line,
+            nim: req.input.nim,
+            name: req.input.name,
+            gender: req.input.gender,
+            email: req.input.email,
+            phone: req.input.phone,
+            line: req.input.line,
             password: hash,
-            bio: input.value.bio,
+            bio: req.input.bio,
             created_at: new Date(),
             updated_at: new Date()
           };
-          insertData.role = (req.user && req.user.role === 'admin') ? input.value.role : 'cakru';
+          insertData.role = (req.user && req.user.role === 'admin') ? req.input.role : 'cakru';
 
           return knex('users').insert(insertData);
         })
         .then(function () {
           if (req.user) {
-            winston.log('verbose', 'User with NIM ' + input.value.nim + ' created by ' + req.user.nim + '.');
-            return res.redirect('/users/' + input.value.nim);
+            winston.log('verbose', 'User with NIM ' + req.input.nim + ' created by ' + req.user.nim + '.');
+            return res.redirect('/users/' + req.input.nim);
           } else {
-            winston.log('verbose', 'User with NIM ' + input.value.nim + ' registered.');
+            winston.log('verbose', 'User with NIM ' + req.input.nim + ' registered.');
             req.flash('info', 'Registration successful, you can now log in.');
             return res.redirect('/login');
           }
@@ -139,21 +137,21 @@ router.get('/users/:nim([0-9]{8})/edit', auth.isNimOwnerOrAdmin, function (req, 
     }); 
 });
 
-router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin, function (req, res, next) {
-  var updateSchema = (req.user.role === 'admin') ? userSchema.userUpdateAdminSchema : userSchema.userUpdateSchema;
-  var input = validation.validate(req.body, updateSchema);
-  if (input.error) return validation.errorRedirect(input.error, '/users/' + req.params.nim + '/edit', req, res);
+
+router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin,
+  validation.validateBody('user-update', function (req) { return '/users/' + req.params.nim + '/edit'; }),
+  function (req, res, next) {
 
   var updateData = {
-    name: input.value.name,
-    gender: input.value.gender,
-    email: input.value.email,
-    phone: input.value.phone,
-    line: input.value.line,
-    bio: input.value.bio,
+    name: req.input.name,
+    gender: req.input.gender,
+    email: req.input.email,
+    phone: req.input.phone,
+    line: req.input.line,
+    bio: req.input.bio,
     updated_at: new Date()
   };
-  if (req.user.role === 'admin') updateData.role = input.role;
+  if (req.user.role === 'admin') updateData.role = req.input.role;
 
   knex('users').where('nim', req.params.nim).update(updateData)
     .then(function (user) {
@@ -170,7 +168,8 @@ router.delete('/users/:nim([0-9]{8})', auth.role('admin'), function (req, res, n
   knex('users').where('nim', req.params.nim).del()
     .then(function (affectedRowCount) {
       if (affectedRowCount > 0) {
-        winston.log('verbose', 'User with NIM ' + req.params.nim + ' deleted (' + affectedRowCount + ' affected rows) by ' + req.user.nim + '.');
+        winston.log('verbose', 'User with NIM ' + req.params.nim
+          + ' deleted (' + affectedRowCount + ' affected rows) by ' + req.user.nim + '.');
         req.flash('info', 'User with NIM ' + req.params.nim + ' deleted.');
       } else {
         req.flash('info', 'No user with NIM ' + req.params.nim + ' found.');
