@@ -4,20 +4,26 @@ var _ = require('lodash');
 var winston = require('./winston.js');
 var auth = {};
 
-function redirectToLogin(req, res) {
+/* Helper functions */
+
+auth.response = {};
+
+auth.response.redirectToLogin = function (req, res) {
   req.flash('error', 'Login terlebih dahulu untuk lanjut.');
   req.session.redirectTo = req.originalUrl;
   winston.debug('Login required, redirectTo: ' + req.session.redirectTo);
   return res.redirect('/login');
-}
+};
 
-function authFailedResponse(req, res) {
+auth.response.failed = function (req, res) {
   winston.log('verbose', 'Unauthorized access to ' + req.originalUrl + ' by ' + req.user.name + ' (' + req.user.nim + ') blocked.');
   return res.sendStatus(403);
-}
+};
+
+/* Middleware for use in ACL */
 
 auth.isLoggedIn = function (req, res, next) {
-  if (!req.user) return redirectToLogin(req, res);
+  if (!req.user) return this.response.redirectToLogin(req, res);
   next();
 };
 
@@ -29,16 +35,10 @@ auth.isNotLoggedIn = function (req, res, next) {
 auth.role = function (roles) {
   if (typeof roles === 'string') roles = [roles];
   return function (req, res, next) {
-    if (!req.user) return redirectToLogin(req, res);
-    if (!_.includes(roles, req.user.role)) return authFailedResponse(req, res);
+    if (!req.user) return this.response.redirectToLogin(req, res);
+    if (!_.includes(roles, req.user.role)) return this.response.failed(req, res);
     next();
   };
-};
-
-auth.isNimOwnerOrAdmin = function (req, res, next) {
-  if (!req.user) return redirectToLogin(req, res);
-  if (req.user.nim != req.params.nim && req.user.role !== 'admin') return authFailedResponse(req, res);
-  next();
 };
 
 module.exports = auth;

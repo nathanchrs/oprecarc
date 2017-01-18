@@ -1,44 +1,27 @@
 'use strict';
 
 var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
 var winston = require('./winston.js');
-var auth = {};
+var aclDefinitions = {};
 
-function redirectToLogin (req, res) {
-  req.flash('error', 'Login terlebih dahulu untuk lanjut.');
-  req.session.redirectTo = req.originalUrl;
-  winston.debug('Login required, redirectTo: ' + req.session.redirectTo);
-  return res.redirect('/login');
-}
+/* Load and register ACL definitions */
+var aclDirectory = path.join(__dirname, '../acl');
+winston.log('verbose', 'Loading and registering ACL definitions...');
+fs.readdirSync(aclDirectory).forEach(function (file) {
+  var aclPath = path.join(aclDirectory, file);
+  if (path.extname(aclPath) === '.js') {
+    winston.log('verbose', 'Registering ACL definitions from %s...', aclPath);
+    var aclFile = require(aclPath);
+    aclDefinitions = Object.assign(aclDefinitions, aclFile);
+  }
+});
 
-function authFailedResponse (req, res) {
-  winston.log('verbose', 'Unauthorized access to ' + req.originalUrl + ' by ' + req.user.name + ' (' + req.user.nim + ') blocked.');
-  return res.sendStatus(403);
-}
-
-auth.isLoggedIn = function (req, res, next) {
-  if (!req.user) return redirectToLogin(req, res);
-  next();
+module.exports = {
+  check: function (operation) {
+    var aclEntry = _.get(aclDefinitions, operation);
+    if (!aclEntry) throw new Error('ACL entry for operation ' + operation + ' not found.');
+    return aclEntry;
+  }
 };
-
-auth.isNotLoggedIn = function (req, res, next) {
-  if (req.user) return res.redirect('/');
-  next();
-};
-
-auth.role = function (roles) {
-  if (typeof roles === 'string') roles = [roles];
-  return function (req, res, next) {
-    if (!req.user) return redirectToLogin(req, res);
-    if (!_.includes(roles, req.user.role)) return authFailedResponse(req, res);
-    next();
-  };
-};
-
-auth.isNimOwnerOrAdmin = function (req, res, next) {
-  if (!req.user) return redirectToLogin(req, res);
-  if (req.user.nim != req.params.nim && req.user.role !== 'admin') return authFailedResponse(req, res);
-  next();
-};
-
-module.exports = auth;

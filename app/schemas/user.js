@@ -4,7 +4,7 @@ var Joi = require('joi');
 
 module.exports = {
 
-  'user-update': {
+  'user-edit': {
 
     default: Joi.object().keys({
       name: Joi.string().required(),

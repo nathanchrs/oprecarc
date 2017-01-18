@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var auth = require('../components/auth.js');
+var acl = require('../components/acl.js');
 var passport = require('../components/passport.js');
 var winston = require('../components/winston.js');
 var knex = require('../components/knex.js');
@@ -11,11 +11,11 @@ var bcrypt = require('bcryptjs');
 var router = express.Router();
 router.baseRoute = '/';
 
-router.get('/login', auth.isNotLoggedIn, function (req, res) {
+router.get('/login', acl.check('login'), function (req, res) {
   res.render('login');
 });
 
-router.post('/login', auth.isNotLoggedIn, function (req, res, next) {
+router.post('/login', acl.check('login'), function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     if (err) return next(err);
     if (!user) {
@@ -36,7 +36,7 @@ router.post('/login', auth.isNotLoggedIn, function (req, res, next) {
   })(req, res, next);
 });
 
-router.post('/logout', auth.isLoggedIn, function (req, res) {
+router.post('/logout', acl.check('logout'), function (req, res) {
   var loggedOutUser = req.user;
   req.logout();
   winston.log('verbose', 'User ' + loggedOutUser.name + ' (' + loggedOutUser.nim + ') logged out.');
@@ -44,7 +44,7 @@ router.post('/logout', auth.isLoggedIn, function (req, res) {
   res.redirect('/login');
 });
 
-router.get('/users', auth.isLoggedIn, function (req, res, next) {
+router.get('/users', acl.check('user-list'), function (req, res, next) {
   knex.select('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
     .from('users')
     .search(req.query.search, ['nim', 'name', 'line', 'email'])
@@ -58,7 +58,7 @@ router.get('/users', auth.isLoggedIn, function (req, res, next) {
     }); 
 });
 
-router.get('/users/:nim([0-9]{8})', auth.isLoggedIn, function (req, res, next) {
+router.get('/users/:nim([0-9]{8})', acl.check('user-info'), function (req, res, next) {
   knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
     .where('nim', req.params.nim)
     .from('users')
@@ -71,15 +71,12 @@ router.get('/users/:nim([0-9]{8})', auth.isLoggedIn, function (req, res, next) {
     }); 
 });
 
-// Note: add auth.isLoggedIn middleware here to prevent non-registerd users form registering
-router.get('/users/create', function (req, res) {
-  if (req.user && req.user.role !== 'admin') return res.redirect('/'); // If not logged in yet, still can create user
-  res.render('user-edit');
+router.get('/users/create', acl.check('user-create'), function (req, res) {
+  res.render('user-edit'); // Reused user-edit template for create.
 });
 
-// Note: add auth.isLoggedIn middleware here to prevent non-registerd users form registering
-router.post('/users', validation.validateBody('user-create', '/users/create'), function (req, res, next) {
-  if (req.user && req.user.role !== 'admin') return res.redirect('/'); // If not logged in yet, still can create user
+router.post('/users', acl.check('user-create'),
+  validation.validateBody('user-create', '/users/create'), function (req, res, next) {
 
   knex.select('nim').from('users').where('nim', req.input.nim).first()
     .then(function (nim) {
@@ -125,7 +122,7 @@ router.post('/users', validation.validateBody('user-create', '/users/create'), f
     });
 });
 
-router.get('/users/:nim([0-9]{8})/edit', auth.isNimOwnerOrAdmin, function (req, res, next) {
+router.get('/users/:nim([0-9]{8})/edit', acl.check('user-edit'), function (req, res, next) {
   knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
   .where('nim', req.params.nim).from('users')
     .then(function (user) {
@@ -138,8 +135,8 @@ router.get('/users/:nim([0-9]{8})/edit', auth.isNimOwnerOrAdmin, function (req, 
 });
 
 
-router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin,
-  validation.validateBody('user-update', function (req) { return '/users/' + req.params.nim + '/edit'; }),
+router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
+  validation.validateBody('user-edit', function (req) { return '/users/' + req.params.nim + '/edit'; }),
   function (req, res, next) {
 
   var updateData = {
@@ -163,8 +160,8 @@ router.put('/users/:nim([0-9]{8})', auth.isNimOwnerOrAdmin,
     }); 
 });
 
-router.delete('/users/:nim([0-9]{8})', auth.role('admin'), function (req, res, next) {
-  if (req.user.nim == req.params.nim) return res.sendStatus(403);
+router.delete('/users/:nim([0-9]{8})', acl.check('user-delete'), function (req, res, next) {
+  if (req.user.nim == req.params.nim) return res.sendStatus(403); // Prevent current user from being deleted
   knex('users').where('nim', req.params.nim).del()
     .then(function (affectedRowCount) {
       if (affectedRowCount > 0) {
