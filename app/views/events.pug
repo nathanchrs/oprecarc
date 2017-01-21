@@ -35,6 +35,8 @@ block content
                       td.compact.actions
                         a.btn-list(href= '/events/' + event.id)
                           i.material-icons zoom_in
+                        a.btn-list(href= '/events/' + event.id + '/attendances/entry')
+                          i.material-icons assignment_ind
                         a.btn-list(href= '/events/' + event.id + '/edit')
                           i.material-icons edit
                         form.inline(action='/events/' + event.id + '?_method=delete', method='post')

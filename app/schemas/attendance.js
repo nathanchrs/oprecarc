@@ -18,7 +18,6 @@ module.exports = {
 
     default: Joi.object().keys({
       user_nim: Joi.number().integer().positive().required(),
-      event_id: Joi.number().integer().positive().required(),
       notes: Joi.string().default('').allow('')
     })
   }

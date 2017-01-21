@@ -6,12 +6,40 @@ block content
 
     div.row.page-header
       div.col.s12
-        h1 Attendances #[small= '- ' + event.name]
+        h1 Attendance entry #[small= '- ' + event.name]
 
     div.row
       div.card.white
+        form(action= '/events/' + event.id + '/attendances/entry', method='post')
           div.card-content
-          +textBoxField({ name: 'name', label: 'Name', value: _.get(event, 'name'), required: true })
-        div.card-action
-          +submitButton({ label: 'Save' })
-  
+            div.row
+              div.col.s8.m9.l10
+                div.input-field
+                  +textBox({ name: 'user_nim', label: 'NIM', value: _.get(event, 'user_nim'), required: true })
+                  label(for='user_nim') NIM
+              div.col.s4.m3.l2
+                br
+                +submitButton({ label: 'Save' })
+              //- TODO: notes (optional)            
+
+    div.row
+      div.card.white
+        div.card-content
+          if attendances.length > 0
+            div.table-container
+              table.highlight
+                thead
+                  tr
+                    th.compact NIM
+                    th.compact Name
+                    th.compact Timestamp
+                    th.compact Notes
+                tbody
+                  each attendance in attendances
+                    tr
+                      td.compact= attendance.user_nim
+                      td.compact= attendance.user_name
+                      td.compact= moment(attendance.timestamp).format(constants.longDateTimeFormat)
+                      td.compact= attendance.notes
+          else
+            i No attendance entry yet.

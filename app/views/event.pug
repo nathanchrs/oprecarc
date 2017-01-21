@@ -8,6 +8,8 @@ block content
       div.col.s12
         a.btn-floating.waves-effect.waves-light(href='/events/' + event.id + '/edit')
           i.material-icons edit
+        a.btn-floating.waves-effect.waves-light.green(href='/events/' + event.id + '/attendances/entry')
+          i.material-icons assignment_ind
         form.inline(action='/events/' + event.id + '?_method=delete', method='post')
           button.btn-floating.waves-effect.waves-light.red(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")')
             i.material-icons delete

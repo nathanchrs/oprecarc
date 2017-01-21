@@ -28,6 +28,7 @@ router.get('/attendances/create', acl.check('attendance-create'), function (req,
   res.render('attendance-edit'); // Reused attendance-edit template for create.
 });
 
+// TODO: handle duplicate attendance entry per event and user
 router.post('/attendances', acl.check('attendance-create'),
   validation.validateBody('attendance-create', '/attendances/create'), function (req, res, next) {
 
@@ -73,13 +74,39 @@ router.post('/attendances', acl.check('attendance-create'),
     });
 });
 
-router.post('/attendances', acl.check('attendance-entry'),
+router.get('/events/:id([0-9]+)/attendances/entry', acl.check('attendance-entry'), function (req, res, next) {
+  knex.first('id', 'name', 'start_time', 'end_time', 'late_time', 'description', 'created_at', 'updated_at')
+    .where('id', req.params.id)
+    .from('events')
+    .then(function (event) {
+      if (!event) return res.sendStatus(404);
+
+      knex.select('attendances.id as id', 'timestamp', 'user_nim', 'users.name as user_name', 'event_id', 'events.name as event_name', 'notes')
+        .from('attendances')
+        .leftJoin('users', 'attendances.user_nim', 'users.nim')
+        .leftJoin('events', 'attendances.event_id', 'events.id')
+        .where('event_id', req.params.id)
+        .orderBy('timestamp', 'desc')
+        .then(function (attendances) {
+          return res.render('attendance-entry', { attendances: attendances, event: event });
+        })
+        .catch(function (err) {
+          return next(err);
+        });
+    })
+    .catch(function (err) {
+      return next(err);
+    }); 
+});
+
+// TODO: handle duplicate attendance entry per event and user
+router.post('/events/:id([0-9]+)/attendances/entry', acl.check('attendance-entry'),
   validation.validateBody('attendance-entry', '/attendances/entry'), function (req, res, next) {
 
   var insertData = {
     timestamp: new Date(),
     user_nim: req.input.user_nim,
-    event_id: req.input.event_id,
+    event_id: req.params.id,
     notes: req.input.notes
   };
 
@@ -89,21 +116,18 @@ router.post('/attendances', acl.check('attendance-entry'),
       if (!nimResult) return validation.errorRedirect({
           details: [{ message: 'NIM does not exist.', path: 'user_nim' }],
           _object: req.body
-        }, '/attendances/create', req, res);
+        }, '/events/' + req.params.id + '/attendances/entry', req, res);
 
       // Check whether the specified event ID exists
-      knex.select('id').from('events').where('id', req.input.event_id).first()
+      knex.select('id').from('events').where('id', req.params.id).first()
         .then(function (idResult) {
-          if (!idResult) return validation.errorRedirect({
-              details: [{ message: 'Event with the specified ID does not exist.', path: 'event_id' }],
-              _object: req.body
-            }, '/attendances/create', req, res);
+          if (!idResult) return res.sendStatus(404);
 
           knex('attendances').insert(insertData)
             .then(function () {
-              winston.log('verbose', 'New attendance entry for user ' + req.input.user_nim + ', event ' + req.input.event_id + ' created by ' + req.user.nim + '.');
+              winston.log('verbose', 'New attendance entry for user ' + req.input.user_nim + ', event ' + req.params.id + ' created by ' + req.user.nim + '.');
               req.flash('info', 'Attendance saved.');
-              return res.redirect('/attendances');
+              return res.redirect('/events/' + req.params.id + '/attendances/entry');
             })
             .catch(function (err) {
               return next(err);
