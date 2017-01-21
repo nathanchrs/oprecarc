@@ -41,6 +41,29 @@ Web pendukung open recruitment dan training ARC ITB
 - `knex seed:make <seed_name>`
 - `knex seed:run`
 
+## Deployment guide
+
+Prerequisites:
+- Node.js 4+
+- MySQL (5.6+ recommended)
+- supervisord
+
+1. Clone the Git repository
+2. `npm install`
+3. `npm install knex -g`
+4. `npm install bower -g`
+5. `bower install`
+6. Create an empty MySQL/MariaDB database
+7. Edit configurations in `config` to match local environment and DB
+8. `knex migrate:latest` to make DB tables
+9. `knex seed:run` to seed DB with sample data (optional, recommended for development and testing only)
+10. `npm run build`
+11. Edit `oprecarc.conf` (especially `command` and `user`) to match your environment.
+12. Copy `oprecarc.conf` to `/etc/supervisor/conf.d` directory.
+13. `supervisorctl reread`
+14. `supervisorctl update`
+15. To start, use `supervisorctl start oprecarc`
+
 ## Todo
 
 - Posts
