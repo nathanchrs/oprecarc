@@ -14,13 +14,14 @@ block content
           div.card-content
             div.row
               div.col.s8.m9.l10
-                div.input-field
-                  +textBox({ name: 'user_nim', label: 'NIM', value: _.get(event, 'user_nim'), required: true })
-                  label(for='user_nim') NIM
+                +textBoxField({ name: 'user_nim', label: 'NIM', required: true })
+                label.-text
+                  a#notesToggle.orange-text(href='#') Add note...
+                div#notesField(style='display:none;')
+                  +textBoxField({ name: 'notes', label: 'Notes (optional)' })
               div.col.s4.m3.l2
                 br
-                +submitButton({ label: 'Save' })
-              //- TODO: notes (optional)            
+                +submitButton({ label: 'Save' })   
 
     div.row
       div.card.white
@@ -43,3 +44,11 @@ block content
                       td.compact= attendance.notes
           else
             i No attendance entry yet.
+
+block append scripts
+  script.
+    $(document).ready(function() {
+        $('#notesToggle').click(function () {
+          $('#notesField').slideToggle();
+        });
+    });
