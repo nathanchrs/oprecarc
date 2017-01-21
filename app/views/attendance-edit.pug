@@ -1,0 +1,26 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        if attendance
+          h1 Edit attendance #[small= '- ' + attendance.name]
+        else
+          h1 Create attendance
+
+    div.row
+      div.card.white
+        form(action= '/attendances' + (attendance ? '/' + attendance.id + '?_method=put' : ''), method= 'post')
+
+          div.card-content
+            +textBoxField({ name: 'timestamp', label: 'Timestamp', value: _.get(attendance, 'timestamp'), required: true, placeholder: '1 Jan 2017 21:00' })
+            +textBoxField({ name: 'user_nim', label: 'NIM', type: 'number', value: _.get(attendance, 'user_nim'), required: true })
+            +textBoxField({ name: 'event_id', label: 'Event ID', type: 'number', value: _.get(attendance, 'event_id'), required: true })
+            +textAreaField({ name: 'notes', label: 'Notes', value: _.get(attendance, 'notes') })
+
+          div.card-action
+            +submitButton({ label: 'Save' })
+  

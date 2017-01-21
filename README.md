@@ -43,4 +43,40 @@ Web pendukung open recruitment dan training ARC ITB
 
 ## Todo
 
-- Lots. See the Google Drive page (Web Oprec).
+- Posts
+  - post table view (/posts?view=table)
+  - post user-friendly view (/posts)
+  - CRUD
+
+- Events
+  - events table view (/events?view=table)
+  - events user-friendly view (/events)
+    * include whether the current user has registered and/or attended the event
+
+- Tasks
+  - tasks table view (/tasks?view=table), admin only
+  - tasks user-friendly view (/tasks)
+  * include the current user's submissions for each task
+  - CRUD
+
+- Submissions
+  - submissions table view (/submissions), admin only
+  - submission uploader
+  - CRUD
+
+- Users
+  - users table view (/users), admin only
+
+- Attendances
+  - attendances global table view (/attendances), admin only
+  * can filter per user or per event
+  - attendance form (client-side temporary storage)
+
+- Registrations (for events, like attendances)
+  - global table view (/registrations), admin only
+  * can filter per user or per event
+  - create/delete
+
+- Static asset/media uploader and link
+
+- Deploy script

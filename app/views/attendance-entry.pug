@@ -1,0 +1,17 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        h1 Attendances #[small= '- ' + event.name]
+
+    div.row
+      div.card.white
+          div.card-content
+          +textBoxField({ name: 'name', label: 'Name', value: _.get(event, 'name'), required: true })
+        div.card-action
+          +submitButton({ label: 'Save' })
+  

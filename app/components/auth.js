@@ -23,7 +23,7 @@ auth.response.failed = function (req, res) {
 /* Middleware for use in ACL */
 
 auth.isLoggedIn = function (req, res, next) {
-  if (!req.user) return this.response.redirectToLogin(req, res);
+  if (!req.user) return auth.response.redirectToLogin(req, res);
   next();
 };
 
@@ -33,7 +33,7 @@ auth.isNotLoggedIn = function (req, res, next) {
 };
 
 auth.role = function (roles) {
-  var _auth = this;
+  var _auth = auth;
   if (typeof roles === 'string') roles = [roles];
   return function (req, res, next) {
     if (!req.user) return _auth.response.redirectToLogin(req, res);

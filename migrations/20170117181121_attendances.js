@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
       table.dateTime('timestamp');
       table.integer('user_nim');
       table.integer('event_id');
-      table.string('description');
+      table.string('notes');
       table.timestamps();
     })
   ]);

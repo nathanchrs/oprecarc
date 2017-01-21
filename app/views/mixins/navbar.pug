@@ -1,32 +1,42 @@
 //- Requires req.user variable
 
+mixin navbarMenu
+  if req.user
+    li
+      a(href='/posts') Posts
+    li
+      a(href='/events') Events
+    li
+      a(href='/tasks') Tasks
+
+    if req.user.role === 'admin'
+      li
+        a(href='/users') Users
+      li
+        a(href='/attendances') Attendances
+
 mixin navbar
 
   nav(role='navigation')
     div.nav-wrapper.container-fluid
       a.brand-logo(href='/') #[img(src='/public/img/logo-dark.png')]
 
+      //- Full-size navbar
+
       ul.right.hide-on-med-and-down
-        li
-          a(href='/posts') Posts
-        li
-          a(href='/events') Training
+
+        +navbarMenu
 
         if req.user
-          li
-            a(href='/users') Users
-          li
-            a(href='/tasks') Tasks
-          li
-            a(href='/attendances') Attendance
           li
             a.dropdown-button(href='#!', data-activates='user-dropdown') #{req.user.name} #[i.material-icons.right arrow_drop_down]
         else
           li
             a(href='/login') Login
 
-      ul.side-nav#nav-mobile
+      //- Mobile sidebar
 
+      ul.side-nav#nav-mobile
         if req.user
           li
             div.userView
@@ -39,29 +49,18 @@ mixin navbar
               a(href='/users/' + req.user.nim)
                 span.white-text.name= req.user.name
                 span.white-text.email= req.user.nim
-              
-        li
-          a(href='/posts') Posts
-        li
-          a(href='/events') Training
-
-        if req.user
-          li
-            a(href='/users') Users
-          li
-            a(href='/tasks') Tasks
-          li
-            a(href='/attendances') Attendance
-
         else
           li
-            div.divider
-          li
             a(href='/login') Login
+          li
+            div.divider
+              
+        +navbarMenu
 
+      //- Mobile open sidebar/menu button
       a.button-collapse(href='#' data-activates='nav-mobile') #[i.material-icons menu]
 
-
+  //- Full-screen user dropdown
   if req.user
     ul.dropdown-content#user-dropdown
       li
