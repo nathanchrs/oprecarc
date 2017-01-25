@@ -48,6 +48,6 @@ block content
             div.col.s12
               label Description
               div.divider
-              div.markdown-field!= marked(event.description)
+              div.markdown-field!= marked(event.description || '')
 
       

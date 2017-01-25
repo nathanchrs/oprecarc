@@ -58,6 +58,6 @@ block content
             div.col.s12
               label Bio
               div.divider
-              div.markdown-field!= marked(user.bio)
+              div.markdown-field!= marked(user.bio || '')
 
       

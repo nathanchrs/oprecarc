@@ -40,8 +40,8 @@ var passport = require('./app/components/passport.js');
 var flash = require('connect-flash');
 var locals = require('./app/components/locals.js');
 
-app.use('/public', express.static('public'));
-app.use('/assets', express.static('bower_components'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/assets', express.static(path.join(__dirname, 'bower_components')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));

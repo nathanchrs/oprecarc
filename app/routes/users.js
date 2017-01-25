@@ -159,6 +159,58 @@ router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
     }); 
 });
 
+router.get('/users/:nim([0-9]{8})/edit/password', acl.check('user-edit-password'), function (req, res, next) {
+  knex.first('nim', 'name', 'role', 'created_at', 'updated_at')
+  .where('nim', req.params.nim).from('users')
+    .then(function (user) {
+      if (!user) return res.sendStatus(404);
+      return res.render('user-edit-password', { user: user });
+    })
+    .catch(function (err) {
+      return next(err);
+    }); 
+});
+
+router.put('/users/:nim([0-9]{8})/password', acl.check('user-edit-password'),
+  validation.validateBody('user-edit-password', function (req) { return '/users/' + req.params.nim + '/edit/password'; }),
+  function (req, res, next) {
+
+  // Check whether old_password matches password of current user (owner or admin)
+  knex.first('nim', 'password').where('nim', req.user.nim).from('users')
+    .then(function (retrievedUser) {
+      if (!retrievedUser) return res.sendStatus(403);
+      return bcrypt.compare(req.input.old_password, retrievedUser.password);
+    })
+    .then(function (isOldPasswordValid) {
+      if (!isOldPasswordValid) {
+        return validation.errorRedirect({
+          details: [{ message: 'Old password is invalid.', path: 'old_password' }],
+          _object: req.body
+        }, '/users/' + req.params.nim + '/edit/password', req, res);
+      }
+
+      bcrypt.hash(req.input.password, 8) // 8 is the salt length to generate
+        .then(function (hash) {
+          var updateData = {
+            password: hash,
+            updated_at: new Date()
+          };
+          return knex('users').where('nim', req.params.nim).update(updateData);
+        })
+        .then(function (user) {
+          winston.log('verbose', 'Password for user with NIM ' + req.params.nim + ' modified by ' + req.user.nim + '.');
+          req.flash('info', 'Password for user with NIM ' + req.params.nim + ' updated.');
+          return res.redirect('/users/' + req.params.nim);
+        })
+        .catch(function (err) {
+          return next(err);
+        }); 
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
 router.delete('/users/:nim([0-9]{8})', acl.check('user-delete'), function (req, res, next) {
   if (req.user.nim == req.params.nim) return res.sendStatus(403); // Prevent current user from being deleted
   knex('users').where('nim', req.params.nim).del()

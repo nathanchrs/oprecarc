@@ -13,12 +13,18 @@ block content
 
     div.row
       div.card.white
-        form(action= '/users' + (user ? '/' + user.nim + '?_method=put' : ''), method= 'post')
-
+        form(action= '/users' + (user ? '/' + user.nim + '?_method=put' : ''), method='post')
           div.card-content
+          
             if (!user)
               +textBoxField({ name: 'nim', label: 'NIM', type: 'number', required: true })
               +textBoxField({ name: 'password', label: 'Password', type: 'password', required: true })
+              +textBoxField({ name: 'password_confirmation', label: 'Confirm password', type: 'password', required: true })
+            else
+              label
+                a.orange-text(href='/users/' + user.nim + '/edit/password') #[i.material-icons.tiny lock] Change password...
+              br
+              br
 
             +textBoxField({ name: 'name', label: 'Name', value: _.get(user, 'name'), required: true })
             +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: utils.toOptionArray(constants.genders) })

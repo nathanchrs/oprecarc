@@ -14,17 +14,19 @@ module.exports = {
       phone: Joi.string().required(),
       line: Joi.string().default('').allow(''),
       password: Joi.string().required(),
+      password_confirmation: Joi.valid(Joi.ref('password')).required(),
       bio: Joi.string().default('').allow('')
     }),
 
     'admin': Joi.object().keys({
       nim: Joi.string().regex(/^[0-9]{8}$/).required(),
+      password: Joi.string().required(),
+      password_confirmation: Joi.valid(Joi.ref('password')).required(),
       name: Joi.string().required(),
       gender: Joi.string().regex(/^(male|female)$/).required(),
       email: Joi.string().email().required(),
       phone: Joi.string().required(),
       line: Joi.string().default('').allow(''),
-      password: Joi.string().required(),
       bio: Joi.string().default('').allow(''),
       role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
     })
@@ -49,6 +51,15 @@ module.exports = {
       line: Joi.string().default('').allow(''),
       bio: Joi.string().default('').allow(''),
       role: Joi.string().regex(/^(cakru|kru|admin)$/).required()
+    })
+  },
+
+  'user-edit-password': {
+
+    default: Joi.object().keys({
+      old_password: Joi.string().required(),
+      password: Joi.string().required(),
+      password_confirmation: Joi.valid(Joi.ref('password')).required()
     })
   }
 };

@@ -15,7 +15,7 @@ block content
             div.row
               div.col.s8.m9.l10
                 +textBoxField({ name: 'user_nim', label: 'NIM', required: true })
-                label.-text
+                label
                   a#notesToggle.orange-text(href='#') Add note...
                 div#notesField(style='display:none;')
                   +textBoxField({ name: 'notes', label: 'Notes (optional)' })

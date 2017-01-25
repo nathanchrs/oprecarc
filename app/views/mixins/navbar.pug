@@ -19,7 +19,7 @@ mixin navbar
 
   nav(role='navigation')
     div.nav-wrapper.container-fluid
-      a.brand-logo(href='/') #[img(src='/public/img/logo-dark.png')]
+      a.brand-logo(href='/') #[img(src='/public/img/logo-white.png')]
 
       //- Full-size navbar
 
@@ -45,7 +45,7 @@ mixin navbar
               form(action='/logout', method='post')
                 button.btn-floating.btn-large.right.waves-effect.waves-light(type='submit') #[i.material-icons lock]
               a(href='/users/' + req.user.nim)
-                img.circle(src='/public/img/user-placeholder.png')
+                img.circle(src='/public/img/user-default.jpg')
               a(href='/users/' + req.user.nim)
                 span.white-text.name= req.user.name
                 span.white-text.email= req.user.nim
