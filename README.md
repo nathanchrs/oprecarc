@@ -46,7 +46,7 @@ Web pendukung open recruitment dan training ARC ITB
 Prerequisites:
 - Node.js 4+
 - MySQL (5.6+ recommended)
-- supervisord
+- supervisor
 
 1. Clone the Git repository
 2. `npm install`
@@ -56,7 +56,7 @@ Prerequisites:
 6. Create an empty MySQL/MariaDB database
 7. Edit configurations in `config` to match local environment and DB
 8. `knex migrate:latest` to make DB tables
-9. `knex seed:run` to seed DB with sample data (optional, recommended for development and testing only)
+9. `knex seed:run` to seed DB with sample data (create admin user with NIM 00000000 and password admin - WARNING: will drop users table; do NOT run if upgrading)
 10. `npm run build`
 11. Edit `oprecarc.conf` (especially `command` and `user`) to match your environment.
 12. Copy `oprecarc.conf` to `/etc/supervisor/conf.d` directory.
@@ -86,9 +86,6 @@ Prerequisites:
   - submissions table view (/submissions), admin only
   - submission uploader
   - CRUD
-
-- Users
-  - users table view (/users), admin only
 
 - Attendances
   - attendances global table view (/attendances), admin only

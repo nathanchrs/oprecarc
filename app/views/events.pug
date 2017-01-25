@@ -35,18 +35,20 @@ block content
                       td.compact.actions
                         a.btn-list(href= '/events/' + event.id)
                           i.material-icons zoom_in
-                        a.btn-list(href= '/events/' + event.id + '/attendances/entry')
-                          i.material-icons assignment_ind
-                        a.btn-list(href= '/events/' + event.id + '/edit')
-                          i.material-icons edit
-                        form.inline(action='/events/' + event.id + '?_method=delete', method='post')
-                          button(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")').btn-list
-                            i.material-icons delete
+                        if req.user && req.user.role == 'admin'
+                          a.btn-list(href= '/events/' + event.id + '/attendances/entry')
+                            i.material-icons assignment_ind
+                          a.btn-list(href= '/events/' + event.id + '/edit')
+                            i.material-icons edit
+                          form.inline(action='/events/' + event.id + '?_method=delete', method='post')
+                            button(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")').btn-list
+                              i.material-icons delete
                       td.compact= event.id
                       td.compact= event.name
                       td.compact= moment(event.start_time).format(constants.longDateTimeFormat)
                       td.compact= moment(event.end_time).format(constants.longDateTimeFormat)
-                      td.compact= moment(event.late_time).format(constants.longDateTimeFormat)
+                      if req.user && req.user.role == 'admin'
+                        td.compact= moment(event.late_time).format(constants.longDateTimeFormat)
                       td.compact= moment(event.created_at).fromNow()
                       td.compact= moment(event.updated_at).fromNow()
           else

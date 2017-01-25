@@ -6,14 +6,15 @@ block content
 
     div.row.page-header
       div.col.s12
-        a.btn-floating.waves-effect.waves-light(href='/events/' + event.id + '/edit')
-          i.material-icons edit
-        a.btn-floating.waves-effect.waves-light.green(href='/events/' + event.id + '/attendances/entry')
-          i.material-icons assignment_ind
-        form.inline(action='/events/' + event.id + '?_method=delete', method='post')
-          button.btn-floating.waves-effect.waves-light.red(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")')
-            i.material-icons delete
-        h1 #{event.name} #[small= '- ' + event.id]
+        if req.user && req.user.role == 'admin'
+          a.btn-floating.waves-effect.waves-light(href='/events/' + event.id + '/edit')
+            i.material-icons edit
+          a.btn-floating.waves-effect.waves-light.green(href='/events/' + event.id + '/attendances/entry')
+            i.material-icons assignment_ind
+          form.inline(action='/events/' + event.id + '?_method=delete', method='post')
+            button.btn-floating.waves-effect.waves-light.red(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")')
+              i.material-icons delete
+        h1= event.name
 
     div.row
       div.card.white
@@ -30,9 +31,10 @@ block content
                 label End time
                 p= moment(event.end_time).format(constants.longDateTimeFormat)
 
-              div.data-field
-                label Late time
-                p= moment(event.late_time).format(constants.longDateTimeFormat)
+              if req.user && req.user.role == 'admin'
+                div.data-field
+                  label Late time
+                  p= moment(event.late_time).format(constants.longDateTimeFormat)
 
             div.col.s12.m6
 
