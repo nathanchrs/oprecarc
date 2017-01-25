@@ -7,7 +7,7 @@ var acl = require('../components/acl.js');
 var router = express.Router();
 
 router.get('/', acl.check('home'), function (req, res) {
-  res.render('home');
+  res.redirect('/events');
 });
 
 module.exports = router;

@@ -9,13 +9,29 @@ var validation = require('../components/validation.js');
 var router = express.Router();
 
 router.get('/events', acl.check('event-list'), function (req, res, next) {
+  if (!req.query.sort) req.query.sort = '-start-time';
+  knex.select('id', 'name', 'start_time', 'end_time', 'late_time', 'created_at', 'updated_at')
+    .from('events')
+    .search(req.query.search, ['name'])
+    .pageAndSort(req.query.page, req.query.perPage, req.query.sort,
+      ['id', 'name', 'start_time', 'end_time', 'created_at', 'updated_at'])
+    .then(function (events) {
+      return res.render('events', { events: events });
+    })
+    .catch(function (err) {
+      return next(err);
+    }); 
+});
+
+router.get('/events-table', acl.check('event-table'), function (req, res, next) {
+  if (!req.query.sort) req.query.sort = '-start-time';
   knex.select('id', 'name', 'start_time', 'end_time', 'late_time', 'description', 'created_at', 'updated_at')
     .from('events')
     .search(req.query.search, ['name'])
     .pageAndSort(req.query.page, req.query.perPage, req.query.sort,
       ['id', 'name', 'start_time', 'end_time', 'late_time', 'created_at', 'updated_at'])
     .then(function (events) {
-      return res.render('events', { events: events });
+      return res.render('events-table', { events: events });
     })
     .catch(function (err) {
       return next(err);

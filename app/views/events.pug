@@ -2,58 +2,38 @@ extends layouts/base.pug
 
 block content
 
-  div.container-fluid
+  div.container
 
     div.row.page-header
       div.col.s12.m7.l8
-        a.btn-floating.waves-effect.waves-light(href='/events/create')
-          i.material-icons add
+        if req.user && req.user.role == 'admin'
+          a.btn-floating.waves-effect.waves-light(href='/events/create')
+            i.material-icons add
+          a.btn-floating.waves-effect.waves-light.blue(href='/events-table')
+            i.material-icons list
         h1 Events
       div.col.s12.m5.l4
         +searchForm
 
-    div.row
-      div.card.white
-        div.card-content
+    if events.data.length > 0
+      each event in events.data
+        div.row
+          div.card.white
+            div.card-content
+              span.card-title= event.name
+              div
+                span= moment(event.start_time).format(constants.longDateTimeFormat)
+                label &nbsp;&nbsp;to&nbsp;&nbsp;
+                span= moment(event.end_time).format(constants.longDateTimeFormat)
+            div.card-action
+              a.btn(href= '/events/' + event.id) More info
 
-          if events.data.length > 0
-            div.table-container
-              table.highlight
-                thead
-                  tr
-                    th.compact
-                    th.compact ID
-                    th.compact Name
-                    th.compact Start time
-                    th.compact End time
-                    th.compact Late time
-                    th.compact Created at
-                    th.compact Updated at
-                tbody
-                  each event in events.data
-                    tr(onclick= 'window.location="/events/' + event.id + '"')
-                      td.compact.actions
-                        a.btn-list(href= '/events/' + event.id)
-                          i.material-icons zoom_in
-                        if req.user && req.user.role == 'admin'
-                          a.btn-list(href= '/events/' + event.id + '/attendances/entry')
-                            i.material-icons assignment_ind
-                          a.btn-list(href= '/events/' + event.id + '/edit')
-                            i.material-icons edit
-                          form.inline(action='/events/' + event.id + '?_method=delete', method='post')
-                            button(type='submit', onclick='return confirm("Are you sure you want to delete event ' + event.name + '?")').btn-list
-                              i.material-icons delete
-                      td.compact= event.id
-                      td.compact= event.name
-                      td.compact= moment(event.start_time).format(constants.longDateTimeFormat)
-                      td.compact= moment(event.end_time).format(constants.longDateTimeFormat)
-                      if req.user && req.user.role == 'admin'
-                        td.compact= moment(event.late_time).format(constants.longDateTimeFormat)
-                      td.compact= moment(event.created_at).fromNow()
-                      td.compact= moment(event.updated_at).fromNow()
-          else
-            i No data available.
+      div.row
+        div.center
+          +pagination(events)
 
-    div.row
-      div.center
-        +pagination(events)
+    else
+      div.row
+        div.card.white
+          div.card-content
+              i No events found.
