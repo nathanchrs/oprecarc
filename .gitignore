@@ -3,6 +3,8 @@
 public/dist/*
 !public/dist/.gitkeep
 
+config/production.json
+
 bower_components/*
 
 # Logs
