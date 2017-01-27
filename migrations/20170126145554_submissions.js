@@ -1,12 +1,12 @@
 
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('attendances', function (table) {
+    knex.schema.createTable('submissions', function (table) {
       table.increments('id').primary();
-      table.dateTime('timestamp');
       table.integer('user_nim');
-      table.integer('event_id');
+      table.integer('task_id');
       table.text('notes');
+      table.integer('grade');
       table.timestamps();
     })
   ]);
@@ -14,6 +14,6 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable('attendances')
+    knex.schema.dropTable('submissions')
   ]);
 };

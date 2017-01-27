@@ -1,10 +1,19 @@
+# Sublime Text files
 *.sublime*
 
+# Compiled assets
 public/dist/*
 !public/dist/.gitkeep
 
+# Uploads directory
+data/uploads/*
+!data/uploads/.gitkeep
+
+# Custom environment-specific configuration
+config/development.json
 config/production.json
 
+# Bower components
 bower_components/*
 
 # Logs
