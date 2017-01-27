@@ -5,6 +5,10 @@ var qs = require('qs');
 var moment = require('moment');
 var marked = require('marked');
 
+marked.setOptions({
+  sanitize: true
+});
+
 /* Utility constants */
 var constants = {
   genders: {
