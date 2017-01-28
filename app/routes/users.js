@@ -57,7 +57,7 @@ router.get('/users', acl.check('user-list'), function (req, res, next) {
     }); 
 });
 
-router.get('/users/:nim([0-9]{8})', acl.check('user-info'), function (req, res, next) {
+router.get('/users/:nim([0-9]{1,8})', acl.check('user-info'), function (req, res, next) {
   knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
     .where('nim', req.params.nim)
     .from('users')
@@ -121,7 +121,7 @@ router.post('/users', acl.check('user-create'),
     });
 });
 
-router.get('/users/:nim([0-9]{8})/edit', acl.check('user-edit'), function (req, res, next) {
+router.get('/users/:nim([0-9]{1,8})/edit', acl.check('user-edit'), function (req, res, next) {
   knex.first('nim', 'name', 'gender', 'email', 'phone', 'line', 'bio', 'role', 'created_at', 'updated_at')
   .where('nim', req.params.nim).from('users')
     .then(function (user) {
@@ -133,7 +133,7 @@ router.get('/users/:nim([0-9]{8})/edit', acl.check('user-edit'), function (req, 
     }); 
 });
 
-router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
+router.put('/users/:nim([0-9]{1,8})', acl.check('user-edit'),
   validation.validateBody('user-edit', function (req) { return '/users/' + req.params.nim + '/edit'; }),
   function (req, res, next) {
 
@@ -159,7 +159,7 @@ router.put('/users/:nim([0-9]{8})', acl.check('user-edit'),
     }); 
 });
 
-router.get('/users/:nim([0-9]{8})/edit/password', acl.check('user-edit-password'), function (req, res, next) {
+router.get('/users/:nim([0-9]{1,8})/edit/password', acl.check('user-edit-password'), function (req, res, next) {
   knex.first('nim', 'name', 'role', 'created_at', 'updated_at')
   .where('nim', req.params.nim).from('users')
     .then(function (user) {
@@ -171,7 +171,7 @@ router.get('/users/:nim([0-9]{8})/edit/password', acl.check('user-edit-password'
     }); 
 });
 
-router.put('/users/:nim([0-9]{8})/password', acl.check('user-edit-password'),
+router.put('/users/:nim([0-9]{1,8})/password', acl.check('user-edit-password'),
   validation.validateBody('user-edit-password', function (req) { return '/users/' + req.params.nim + '/edit/password'; }),
   function (req, res, next) {
 
@@ -211,7 +211,7 @@ router.put('/users/:nim([0-9]{8})/password', acl.check('user-edit-password'),
     });
 });
 
-router.delete('/users/:nim([0-9]{8})', acl.check('user-delete'), function (req, res, next) {
+router.delete('/users/:nim([0-9]{1,8})', acl.check('user-delete'), function (req, res, next) {
   if (req.user.nim == req.params.nim) return res.sendStatus(403); // Prevent current user from being deleted
   knex('users').where('nim', req.params.nim).del()
     .then(function (affectedRowCount) {

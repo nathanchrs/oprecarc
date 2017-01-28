@@ -3,6 +3,6 @@ $primary-color-light: lighten($primary-color, 15%);
 $primary-color-dark: darken($primary-color, 15%);
 
 $secondary-color: #ff9100; //color("orange", "accent-3");
-$link-color: $primary-color-dark;
+$link-color: $secondary-color;
 
 $roboto-font-path: "/assets/materialize/dist/fonts/roboto/";

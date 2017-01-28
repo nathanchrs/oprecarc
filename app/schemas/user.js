@@ -7,7 +7,7 @@ module.exports = {
   'user-create': {
 
     default: Joi.object().keys({
-      nim: Joi.string().regex(/^[0-9]{8}$/).required(),
+      nim: Joi.string().regex(/^[1-9][0-9]{7}$/).required(),
       name: Joi.string().required(),
       gender: Joi.string().regex(/^(male|female)$/).required(),
       email: Joi.string().email().required(),
@@ -19,7 +19,7 @@ module.exports = {
     }),
 
     'admin': Joi.object().keys({
-      nim: Joi.string().regex(/^[0-9]{8}$/).required(),
+      nim: Joi.string().regex(/^[1-9][0-9]{7}$/).required(),
       password: Joi.string().required(),
       password_confirmation: Joi.valid(Joi.ref('password')).required(),
       name: Joi.string().required(),

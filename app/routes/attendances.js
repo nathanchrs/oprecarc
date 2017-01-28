@@ -9,6 +9,7 @@ var validation = require('../components/validation.js');
 var router = express.Router();
 
 router.get('/attendances', acl.check('attendance-list'), function (req, res, next) {
+  if (!req.query.sort) req.query.sort = '-timestamp';
   knex.select('attendances.id as id', 'timestamp', 'user_nim', 'users.name as user_name', 'event_id', 'events.name as event_name', 'notes')
     .from('attendances')
     .leftJoin('users', 'attendances.user_nim', 'users.nim')

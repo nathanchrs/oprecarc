@@ -22,7 +22,7 @@ block content
               +textBoxField({ name: 'password_confirmation', label: 'Confirm password', type: 'password', required: true })
             else
               label
-                a.orange-text(href='/users/' + user.nim + '/edit/password') #[i.material-icons.tiny lock] Change password...
+                a(href='/users/' + user.nim + '/edit/password') #[i.material-icons.tiny lock] Change password...
               br
               br
 

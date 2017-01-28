@@ -9,7 +9,7 @@ var validation = require('../components/validation.js');
 var router = express.Router();
 
 router.get('/events', acl.check('event-list'), function (req, res, next) {
-  if (!req.query.sort) req.query.sort = '-start-time';
+  if (!req.query.sort) req.query.sort = '-start_time';
   knex.select('id', 'name', 'start_time', 'end_time', 'late_time', 'created_at', 'updated_at')
     .from('events')
     .search(req.query.search, ['name'])
@@ -24,7 +24,7 @@ router.get('/events', acl.check('event-list'), function (req, res, next) {
 });
 
 router.get('/events-table', acl.check('event-table'), function (req, res, next) {
-  if (!req.query.sort) req.query.sort = '-start-time';
+  if (!req.query.sort) req.query.sort = '-start_time';
   knex.select('id', 'name', 'start_time', 'end_time', 'late_time', 'description', 'created_at', 'updated_at')
     .from('events')
     .search(req.query.search, ['name'])
