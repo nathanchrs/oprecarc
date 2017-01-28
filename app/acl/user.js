@@ -14,7 +14,7 @@ module.exports = {
   'login': auth.isNotLoggedIn,
   'logout': auth.isLoggedIn,
 
-  'user-list': auth.isLoggedIn,
+  'user-list': auth.role('admin'),
   'user-info': auth.isLoggedIn,
 
   'user-create': function (req, res, next) {

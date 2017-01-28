@@ -29,9 +29,10 @@ block content
                 label Email
                 p= user.email
 
-              div.data-field
-                label Phone
-                p= user.phone
+              if req.user && (req.user.role === 'admin' || req.user.nim == user.nim)
+                div.data-field
+                  label Phone
+                  p= user.phone
 
               div.data-field
                 label LINE ID
