@@ -25,8 +25,9 @@ block content
                     th.compact NIM
                     th.compact Name
                     th.compact Gender
-                    th.compact Email
-                    th.compact Phone
+                    if req.user && (req.user.role === 'admin')
+                      th.compact Email
+                      th.compact Phone
                     th.compact LINE
                     th.compact Role
                     th.compact Created at
@@ -45,8 +46,9 @@ block content
                       td.compact= user.nim
                       td.compact= user.name
                       td.compact= _.get(constants.genders, user.gender, '')
-                      td.compact= user.email
-                      td.compact= user.phone
+                      if req.user && (req.user.role === 'admin')
+                        td.compact= user.email
+                        td.compact= user.phone
                       td.compact= user.line
                       td.compact= _.get(constants.roles, user.role, '')
                       td.compact= moment(user.created_at).fromNow()

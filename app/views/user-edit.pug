@@ -28,14 +28,16 @@ block content
 
             +textBoxField({ name: 'name', label: 'Name', value: _.get(user, 'name'), required: true })
             +selectField({ name: 'gender', label: 'Gender', value: _.get(user, 'gender'), required: true, placeholder: 'Select gender...', options: utils.toOptionArray(constants.genders) })
-            +textBoxField({ name: 'email', label: 'Email', type: 'email', value: _.get(user, 'email'), required: true })
-            +textBoxField({ name: 'phone', label: 'Phone', value: _.get(user, 'phone'), required: true })
+            +textBoxField({ name: 'email', label: 'Email*', type: 'email', value: _.get(user, 'email'), required: true })
+            +textBoxField({ name: 'phone', label: 'Phone*', value: _.get(user, 'phone'), required: true })
             +textBoxField({ name: 'line', label: 'LINE ID', value: _.get(user, 'line') })
 
             if req.user && req.user.role === 'admin'
               +selectField({ name: 'role', label: 'Role', value: _.get(user, 'role'), required: true, placeholder: 'Select role...', options: utils.toOptionArray(constants.roles) })
 
             +textAreaField({ name: 'bio', label: 'Bio (Github-Flavored Markdown available)', value: _.get(user, 'bio') })
+
+            label * Email and phone number will not be published.
 
           div.card-action
             +submitButton({ label: 'Save' })

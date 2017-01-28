@@ -26,13 +26,12 @@ block content
                 p= user.name
 
               div.data-field
-                label Email
-                p= user.email
+                label Gender
+                p= _.get(constants.genders, user.gender, '')
 
-              if req.user && (req.user.role === 'admin' || req.user.nim == user.nim)
-                div.data-field
-                  label Phone
-                  p= user.phone
+              div.data-field
+                label Role
+                p= _.get(constants.roles, user.role, '')
 
               div.data-field
                 label LINE ID
@@ -40,13 +39,15 @@ block content
 
             div.col.s12.m6
 
-              div.data-field
-                label Gender
-                p= _.get(constants.genders, user.gender, '')
+              if req.user && (req.user.role === 'admin' || req.user.nim == user.nim)
 
-              div.data-field
-                label Role
-                p= _.get(constants.roles, user.role, '')
+                div.data-field
+                  label Email
+                  p= user.email
+
+                div.data-field
+                  label Phone
+                  p= user.phone
 
               div.data-field
                 label Created at
