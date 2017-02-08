@@ -5,6 +5,8 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.integer('user_nim');
       table.integer('task_id');
+      table.string('filename');
+      table.string('slug');
       table.text('notes');
       table.integer('grade');
       table.timestamps();

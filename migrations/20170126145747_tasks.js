@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('tasks', function (table) {
       table.increments('id').primary();
       table.string('name');
+      table.dateTime('deadline');
       table.text('description');
       table.timestamps();
     })
