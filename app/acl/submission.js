@@ -6,5 +6,6 @@ module.exports = {
   'submission-list': auth.role('admin'),
   'submission-info': auth.isLoggedIn,
   'submission-create': auth.isLoggedIn,
+  'submission-edit': auth.role('admin'),
   'submission-delete': auth.role('admin')
 };

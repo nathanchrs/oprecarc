@@ -1,0 +1,37 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12.m7.l8
+        if req.user && req.user.role == 'admin'
+          a.btn-floating.waves-effect.waves-light(href='/tasks/create')
+            i.material-icons add
+          a.btn-floating.waves-effect.waves-light.blue(href='/tasks-table')
+            i.material-icons list
+        h1 Tasks
+      div.col.s12.m5.l4
+        +searchForm
+
+    if tasks.data.length > 0
+      each task in tasks.data
+        div.row
+          div.card.white
+            div.card-content
+              span.card-title= task.name
+              div
+                span= 'Submission open up to ' + moment(task.deadline).format(constants.longDateTimeFormat)
+            div.card-action
+              a.btn(href= '/tasks/' + task.id) More info
+
+      div.row
+        div.center
+          +pagination(tasks)
+
+    else
+      div.row
+        div.card.white
+          div.card-content
+              i No task found.

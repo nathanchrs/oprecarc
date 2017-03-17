@@ -1,0 +1,51 @@
+extends layouts/base.pug
+
+block content
+
+  div.container-fluid
+
+    div.row.page-header
+      div.col.s12.m7.l8
+        a.btn-floating.waves-effect.waves-light(href='/tasks/create')
+          i.material-icons add
+        h1 Tasks
+      div.col.s12.m5.l4
+        +searchForm
+
+    div.row
+      div.card.white
+        div.card-content
+
+          if tasks.data.length > 0
+            div.table-container
+              table.highlight
+                thead
+                  tr
+                    th.compact
+                    th.compact ID
+                    th.compact Name
+                    th.compact Deadline
+                    th.compact Created at
+                    th.compact Updated at
+                tbody
+                  each task in tasks.data
+                    tr(onclick= 'window.location="/tasks/' + task.id + '"')
+                      td.compact.actions
+                        a.btn-list(href= '/tasks/' + task.id)
+                          i.material-icons zoom_in
+                        a.btn-list(href= '/tasks/' + task.id + '/edit')
+                          i.material-icons edit
+                        form.inline(action='/tasks/' + task.id + '?_method=delete', method='post')
+                          button(type='submit', onclick='return confirm("Are you sure you want to delete task ' + task.name + '?")').btn-list
+                            i.material-icons delete
+                      td.compact= task.id
+                      td.compact= task.name
+                      td.compact= moment(task.deadline).format(constants.longDateTimeFormat)
+                      td.compact= moment(task.created_at).fromNow()
+                      td.compact= moment(task.updated_at).fromNow()
+          else
+            i No data available.
+
+    div.row
+      div.center
+        +pagination(tasks)

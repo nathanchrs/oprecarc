@@ -21,6 +21,15 @@ mixin textAreaField(options)
     +textArea(options)
     label(for= options.name)= options.label
 
+//- Parameters: name, label, placeholder, required, disabled
+mixin fileField(options)
+  div.file-field.input-field
+    div.btn.grey
+      span= utils.coalesce(options.label, 'Browse')
+      input(type= 'file', name= options.name, required= options.required, disabled= options.disabled)
+    div.file-path-wrapper
+      input.file-path.validate(type= 'text', placeholder= options.placeholder, disabled= options.disabled)
+
 //- Parameters: name, value, options, placeholder, required, disabled
 //- options is an array of objects containing value, description, and disabled
 mixin select(options)

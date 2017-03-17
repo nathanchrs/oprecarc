@@ -1,0 +1,25 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        if task
+          h1 Edit task #[small= '- ' + task.name]
+        else
+          h1 Create task
+
+    div.row
+      div.card.white
+        form(action= '/tasks' + (task ? '/' + task.id + '?_method=put' : ''), method= 'post')
+
+          div.card-content
+            +textBoxField({ name: 'name', label: 'Name', value: _.get(task, 'name'), required: true })
+            +textBoxField({ name: 'deadline', label: 'Deadline', value: _.get(task, 'deadline'), required: true, placeholder: '1 Jan 2017 21:00' })
+            +textAreaField({ name: 'description', label: 'Description (Github-Flavored Markdown available)', value: _.get(task, 'description') })
+
+          div.card-action
+            +submitButton({ label: 'Save' })
+  

@@ -6,7 +6,7 @@ mixin navbarMenu
       a(href='/posts') Posts
     li
       a(href='/events') Events
-    //-li
+    li
       a(href='/tasks') Tasks
 
     if req.user.role === 'admin'
