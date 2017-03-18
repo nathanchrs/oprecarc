@@ -1,0 +1,51 @@
+extends layouts/base.pug
+
+block content
+
+  div.container-fluid
+
+    div.row.page-header
+      div.col.s12.m7.l8
+        h1 Submissions
+      div.col.s12.m5.l4
+        +searchForm
+
+    div.row
+      div.card.white
+        div.card-content
+
+          if submissions.data.length > 0
+            div.table-container
+              table.highlight
+                thead
+                  tr
+                    th.compact
+                    th.compact ID
+                    th.compact Submitted by
+                    th.compact Task
+                    th.compact Filename
+                    th.compact Submitted at
+                    th.compact Notes
+                tbody
+                  each submission in submissions.data
+                    tr
+                      td.compact.actions
+                        a.btn-list(href= '/submissions/' + submission.id + '/download')
+                            i.material-icons system_update_alt
+                        a.btn-list(href= '/submissions/' + submission.id + '/edit')
+                          i.material-icons edit
+                        form.inline(action='/submissions/' + submission.id + '?_method=delete', method='post')
+                          button(type='submit', onclick='return confirm("Are you sure you want to delete submission ' + submission.name + '?")').btn-list
+                            i.material-icons delete
+                      td.compact= submission.id
+                      td.compact= submission.user_nim
+                      td.compact= submission.task_name
+                      td.compact= submission.filename
+                      td.compact= moment(submission.created_at).format(constants.longDateTimeFormat)
+                      td.compact= submission.notes
+          else
+            i No data available.
+
+    div.row
+      div.center
+        +pagination(submissions)

@@ -7,16 +7,13 @@ module.exports = {
   'submission-create': {
 
     default: Joi.object().keys({
-      user_nim: Joi.number().integer().positive().required(),
       task_id: Joi.number().integer().positive().required(),
-      notes: Joi.string().default('').allow(''),
+      submission_file: Joi.any()
     }),
 
     admin: Joi.object().keys({
-      user_nim: Joi.number().integer().positive().required(),
       task_id: Joi.number().integer().positive().required(),
-      notes: Joi.string().default('').allow(''),
-      grade: Joi.number().integer().positive()
+      submission_file: Joi.any()
     }),
   },
 
@@ -27,8 +24,6 @@ module.exports = {
     }),
 
     admin: Joi.object().keys({
-      user_nim: Joi.number().integer().positive().required(),
-      task_id: Joi.number().integer().positive().required(),
       filename: Joi.string().required(),
       notes: Joi.string().default('').allow(''),
       grade: Joi.number().integer().positive()

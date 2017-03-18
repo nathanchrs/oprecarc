@@ -25,5 +25,7 @@
     }
   },
   
-  "routePrefix": ""
+  "routePrefix": "",
+
+  "maxSubmissionSize": 16777216
 }

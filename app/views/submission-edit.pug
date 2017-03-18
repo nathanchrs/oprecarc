@@ -1,0 +1,25 @@
+extends layouts/base.pug
+
+block content
+
+  div.container
+
+    div.row.page-header
+      div.col.s12
+        if submission
+          h1 Edit submission #[small= '- ' + submission.filename]
+        else
+          h1 Create submission
+
+    div.row
+      div.card.white
+        form(action= '/submissions' + (submission ? '/' + submission.id + '?_method=put' : ''), method= 'post')
+
+          div.card-content
+            +textBoxField({ name: 'filename', label: 'Filename', value: _.get(submission, 'filename'), required: true })
+            +textBoxField({ name: 'grade', label: 'Grade', type: 'number', value: _.get(submission, 'grade') })
+            +textAreaField({ name: 'notes', label: 'Notes', value: _.get(submission, 'notes') })
+
+          div.card-action
+            +submitButton({ label: 'Save' })
+  

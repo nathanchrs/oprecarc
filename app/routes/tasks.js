@@ -44,11 +44,21 @@ router.get('/tasks/:id([0-9]+)', acl.check('task-info'), function (req, res, nex
     .from('tasks')
     .then(function (task) {
       if (!task) return res.sendStatus(404);
-      return res.render('task', { task: task });
+      return knex.select('id', 'filename', 'slug', 'grade', 'notes', 'created_at')
+        .from('submissions')
+        .where('task_id', task.id)
+        .andWhere('user_nim', req.user.nim)
+        .orderBy('created_at', 'desc')
+        .then(function (submissions) {
+          return res.render('task', { task: task, submissions: submissions });
+        })
+        .catch(function (err) {
+          return next(err);
+        });
     })
     .catch(function (err) {
       return next(err);
-    }); 
+    });
 });
 
 router.get('/tasks/create', acl.check('task-create'), function (req, res) {

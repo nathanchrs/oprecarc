@@ -23,6 +23,8 @@ var config = require('config');
 var winston = require('./app/components/winston.js');
 
 // Set constants
+global.appDirectory = __dirname;
+global.uploadDirectory = path.join(__dirname, 'data/uploads');
 var routeDirectory = path.join(__dirname, 'app/routes');
 var viewDirectory = path.join(__dirname, 'app/views');
 
